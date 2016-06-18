@@ -1,0 +1,12 @@
+MySQL-python
+Flask
+Flask-HTTPAuth
+Flask-SQLAlchemy
+Flask-RESTful
+Jinja2
+MarkupSafe
+SQLAlchemy
+Werkzeug
+itsdangerous
+passlib
+requests
