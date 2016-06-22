@@ -14,6 +14,8 @@ from app import views
 import che.workspace
 import che.user
 import che.group
+import che.exam
+import che.project
 
 if __name__ == '__main__':
     #create table from up model

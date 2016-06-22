@@ -3,14 +3,16 @@ from flask import Flask, jsonify, abort, make_response, request , url_for
 from flask.ext.restful import Api, Resource, reqparse , fields, marshal
 from flask.ext.httpauth import HTTPBasicAuth
 from app import app, api
+from app import config
 import json
 import requests
 import os
 
-
 def post(url,data):
     command = 'curl -X POST --header \'Content-Type: application/json\' --header \'Accept: application/json\' -d \'%s\' %s'%(json.dumps(data),url)
+    print(command)
     result = os.popen(command).readlines()[0]
+    print(result)
     return json.loads(result)
 
 def get_workspace_list(skipCount,maxItems):
@@ -26,12 +28,44 @@ def create_workspace(name):
     workspaceUrl = 'http://localhost:8080/api/workspace?account=&attribute=stackId:java-default'
     return post(workspaceUrl,workspace)
 
+
+def create_project_in_workspace(workspace_id, project_url, project_name):
+    print("lalalalalalal")
+    workspace_list =  get_workspace_list(0,1000)
+    print(workspace_list)
+    workspace = list(filter(lambda workspace: workspace["id"] == workspace_id,workspace_list))
+    if len(workspace) > 0:
+        url = workspace[0]["runtime"]["devMachine"]["runtime"]["servers"]["4401/tcp"]["url"]
+        post('%s/project/%s/import/%s'%(url,workspace_id,project_name),{"location":project_url,"parameters":{},"type":"git"})
+
+
+def change_workspace_state(workspace_id, workspace_name, command):
+    if command == 1:
+        response = post('%sworkspace/%s/runtime?environment=%s'%(config.cheHost,workspace_id,workspace_name), {})
+        print(response)
+        return response
+    else:
+        response = requests.delete('%sworkspace/%s/runtime'%(config.cheHost,workspace_id))
+        if r.status_code == 204:
+            return {"result":"success"},200
+        else:
+            return {"result":"failed"},200
+
+
+
+
+class WorkspaceStateAPI(Resource):
+    def get(self, workspace_id, workspace_name, command):
+        return change_workspace_state(workspace_id,workspace_name,command)
+api.add_resource(WorkspaceStateAPI, '/che/api/v1.0/workspaces/<string:workspace_name>/<string:workspace_id>/<int:command>', endpoint = 'workspaceState')
+
+
 class WorkspaceAPI(Resource):
-    def delete(self, workspaceId):
+    def delete(self, workspace_id):
         response = requests.delete('http://localhost:8080/api/workspace/%s'%(workspaceId))
         return response.json()
         pass
-api.add_resource(WorkspaceAPI, '/che/api/v1.0/workspaces/<string:workspaceId>', endpoint = 'workspace')
+api.add_resource(WorkspaceAPI, '/che/api/v1.0/workspaces/<string:workspace_id>', endpoint = 'workspace')
 
 
 
