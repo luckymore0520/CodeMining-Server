@@ -21,20 +21,3 @@ if __name__ == '__main__':
     #create table from up model
     print("Create All")
     db.create_all()
-
-
-# @auth.get_password
-# def get_password(username):
-#     if username == 'miguel':
-#         return 'python'
-#     return None
-#
-# @auth.error_handler
-# def unauthorized():
-#     return make_response(jsonify({'error': 'Unauthorized access'}), 403)
-#
-#
-#
-# @app.errorhandler(404)
-# def not_found(error):
-#     return make_response(jsonify({'error': 'Not found'}), 404)

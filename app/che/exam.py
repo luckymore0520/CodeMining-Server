@@ -38,9 +38,6 @@ def configExam(exam):
             timer.start()
 
 
-
-
-
 class ExamsAPI(Resource):
     def post(self):
         name = request.json.get('name')
@@ -60,4 +57,4 @@ class ExamsAPI(Resource):
         db.session.commit()
         configExam(exam)
         return exam.json()
-api.add_resource(ExamsAPI, '/che/api/v1.0/exams/', endpoint = 'Exams')
+api.add_resource(ExamsAPI, '/che/api/v1.0/exams', endpoint = 'Exams')

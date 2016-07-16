@@ -1,0 +1,24 @@
+创建群组
+curl -i -H "Content-Type: application/json" -X POST -d '{name:"name","description":"description"}' http://localhost:5000/che/api/v1.0/groups
+获取群组
+curl http://localhost:5000/che/api/v1.0/groups
+
+
+添加群组成员
+curl -i -H "Content-Type: application/json" -X POST -d '{"group_id":"2","user_id":"1"}' http://localhost:5000/che/api/v1.0/groupRelation
+
+获取群组成员
+curl http://localhost:5000/che/api/v1.0/groups?group_id=1
+
+获取用户所在群组
+curl http://localhost:5000/che/api/v1.0/groups?user_id=1
+
+创建新用户
+curl -i -H "Content-Type: application/json" -X POST -d '{"name":"lalala","username":"wefowefjwoi","password":"123456"}' http://localhost:5000/che/api/v1.0/users
+创建的时候会同时创建workspace，此处要保证che开启，否则出现未知错误，暂时没有对各种错误情况进行处理
+
+创建项目
+curl -i -H "Content-Type: application/json" -X POST -d '{"name":"code-mining","description":"code-mining-server","url":"https://github.com/luckymore0520/CodeMining-Server"}' http://localhost:5000/che/api/v1.0/projects
+
+创建考试
+curl -i -H "Content-Type: application/json" -X POST -d '{"name":"code-mining","description":"code-mining-server","project_id":2,"group_id":1}' http://localhost:5000/che/api/v1.0/projects

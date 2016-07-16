@@ -26,8 +26,6 @@ class ProjectAPI(Resource):
             return project.json()
 api.add_resource(ProjectAPI, '/che/api/v1.0/project/<string:project_id>', endpoint = 'Project')
 
-
-
 class ProjectsAPI(Resource):
     def post(self):
         name = request.json.get('name')
@@ -43,5 +41,5 @@ class ProjectsAPI(Resource):
         project.url = url
         db.session.add(project)
         db.session.commit()
-        return project.json(),200
-api.add_resource(ProjectsAPI, '/che/api/v1.0/projects/', endpoint = 'Projects')
+        return project.json()
+api.add_resource(ProjectsAPI, '/che/api/v1.0/projects', endpoint = 'Projects')

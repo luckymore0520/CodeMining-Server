@@ -1,16 +1,26 @@
+#coding=utf-8
+
 from flask import Flask, jsonify, abort, g, make_response, request , url_for
+from flask.ext.restful import Api, Resource
 from flask.ext.httpauth import HTTPBasicAuth
 from sqlalchemy.orm import relationship, backref
 from passlib.apps import custom_app_context as pwd_context
 from itsdangerous import (TimedJSONWebSignatureSerializer
                           as Serializer, BadSignature, SignatureExpired)
-from app import app ,db
+from app import app,db,api
 import json
 import workspace
 from workspace import create_workspace
 
 auth = HTTPBasicAuth()
 
+# Model User 用户 对应表:User
+# id->唯一标识
+# username->用户名
+# name->用户姓名
+# password_hash->加密后的密码
+# workspace_id->用户对应workspace_id
+# user_groups->与群组的关联，即每个群组中有哪些用户，只是定义一个外键，不存在群组表中
 class User(db.Model):
     __tablename__ = 'User'
     id = db.Column(db.Integer, primary_key=True)
@@ -19,6 +29,9 @@ class User(db.Model):
     workspace_id = db.Column(db.String(32))
     name = db.Column(db.String(32))
     user_groups = relationship("GroupRelation",backref = "User")
+
+    def json(self):
+        return {"id":self.id,"username":self.username,"workspace_id":self.workspace_id,"name":self.name}
 
     def hash_password(self, password):
         self.password_hash = pwd_context.encrypt(password)
@@ -42,7 +55,7 @@ class User(db.Model):
         user = User.query.get(data['id'])
         return user
 
-
+# 校验密码
 @auth.verify_password
 def verify_password(username_or_token, password):
     # first try to authenticate by token
@@ -55,27 +68,32 @@ def verify_password(username_or_token, password):
     g.user = user
     return True
 
+class UsersAPI(Resource):
+    # 创建一个用户，创建用户的同时创建其workspace并且获取workspace_id
+    def post(self):
+        username = request.json.get('username')
+        password = request.json.get('password')
+        name = request.json.get('name')
+        if username is None or password is None:
+            abort(400)    # missing arguments
+        if User.query.filter_by(username=username).first() is not None:
+            abort(400)    # existing user
+        # create workspace
+        created_workspace = create_workspace(name)
+        workspace_id = created_workspace["id"]
+        user = User(username=username)
+        user.hash_password(password)
+        user.name = name
+        user.workspace_id = workspace_id
+        db.session.add(user)
+        db.session.commit()
+        return {'name':user.name,'username': user.username, 'workspace_id':user.workspace_id},
 
-@app.route('/che/api/v1.0/users', methods=['POST'])
-def new_user():
-    username = request.json.get('username')
-    password = request.json.get('password')
-    name = request.json.get('name')
-    if username is None or password is None:
-        abort(400)    # missing arguments
-    if User.query.filter_by(username=username).first() is not None:
-        abort(400)    # existing user
-    # create workspace
-    created_workspace = create_workspace(name)
-    workspace_id = created_workspace["id"]
-    user = User(username=username)
-    user.hash_password(password)
-    user.name = name
-    user.workspace_id = workspace_id
-    db.session.add(user)
-    db.session.commit()
-    return (jsonify({'name':user.name,'username': user.username}), 201,
-            {'Location': url_for('get_user', id=user.id, _external=True)})
+    # 删除用户的同时记得删除workspace
+    def delete(self):
+        pass
+
+api.add_resource(UsersAPI,'/che/api/v1.0/users',endpoint = "User")
 
 
 @app.route('/che/api/v1.0/users/<int:id>')
