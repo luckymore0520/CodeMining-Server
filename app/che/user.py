@@ -7,7 +7,7 @@ from sqlalchemy.orm import relationship, backref
 from passlib.apps import custom_app_context as pwd_context
 from itsdangerous import (TimedJSONWebSignatureSerializer
                           as Serializer, BadSignature, SignatureExpired)
-from app import app,db,api
+from app import app,db,api,gl
 import json
 import workspace
 from workspace import create_workspace
@@ -80,6 +80,10 @@ class UsersAPI(Resource):
             abort(409)    # existing user
         # create workspace
         created_workspace = create_workspace(name)
+        glUser = gl.users.create({'email': username+"@njuse.com",
+                        'password': password,
+                        'username': username,
+                        'name': name})
         workspace_id = created_workspace["id"]
         user = User(username=username)
         user.hash_password(password)
