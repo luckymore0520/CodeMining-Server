@@ -1,4 +1,4 @@
-cheHost = "http://localhost:8080/api/"
+cheHost = "http://115.29.184.56:8080/api/"
 dbHost = "localhost:3306"
 dbUser = "root"
 dbPass = ""

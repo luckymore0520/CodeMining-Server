@@ -8,6 +8,9 @@ import json
 import requests
 import os
 
+
+# 调用命令行中的post方法
+# To Do 暂时无法解决为何使用request post会出现内部错误的问题，只能使用命令行的curl执行操作
 def post(url,data):
     command = 'curl -X POST --header \'Content-Type: application/json\' --header \'Accept: application/json\' -d \'%s\' %s'%(json.dumps(data),url)
     print(command)
@@ -15,22 +18,22 @@ def post(url,data):
     print(result)
     return json.loads(result)
 
+
 def get_workspace_list(skipCount,maxItems):
-    response = requests.get('http://localhost:8080/api/workspace', params = {'skipCount':skipCount, 'maxItems':maxItems})
+    response = requests.get(config.cheHost+'workspace', params = {'skipCount':skipCount, 'maxItems':maxItems})
     return response.json()
 
 def create_workspace(name):
     recipeData = {"type":"docker","name":"generated-Java","permissions":{"groups":[{"name":"public","acl":["read"]}],"users":{}},"script":"FROM codenvy/ubuntu_jdk8"}
-    recipeUrl = "http://localhost:8080/api/recipe"
+    recipeUrl = config.cheHost+"recipe"
     result = post(recipeUrl,recipeData)
     scriptUrl = result["links"][0]["href"]
     workspace = {"environments":[{"name":name,"machineConfigs":[{"name":"ws-machine","limits":{"ram":1000},"type":"docker","source":{"location":scriptUrl,"type":"dockerfile"},"dev":True}]}],"name":name,"defaultEnv":name}
-    workspaceUrl = 'http://localhost:8080/api/workspace?account=&attribute=stackId:java-default'
+    workspaceUrl = config.cheHost+'workspace?account=&attribute=stackId:java-default'
     return post(workspaceUrl,workspace)
 
 
 def create_project_in_workspace(workspace_id, project_url, project_name):
-    print("lalalalalalal")
     workspace_list =  get_workspace_list(0,1000)
     print(workspace_list)
     workspace = list(filter(lambda workspace: workspace["id"] == workspace_id,workspace_list))
@@ -62,7 +65,7 @@ api.add_resource(WorkspaceStateAPI, '/che/api/v1.0/workspaces/<string:workspace_
 
 class WorkspaceAPI(Resource):
     def delete(self, workspace_id):
-        response = requests.delete('http://localhost:8080/api/workspace/%s'%(workspaceId))
+        response = requests.delete(config.cheHost+'workspace/%s'%(workspaceId))
         return response.json()
         pass
 api.add_resource(WorkspaceAPI, '/che/api/v1.0/workspaces/<string:workspace_id>', endpoint = 'workspace')

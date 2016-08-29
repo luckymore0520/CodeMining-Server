@@ -1,3 +1,5 @@
+#coding=utf-8
+
 from flask import Flask, jsonify, abort, g, make_response, request , url_for
 from flask.ext.restful import Api, Resource, reqparse , fields, marshal
 from app import app ,db , api
@@ -6,7 +8,11 @@ from sqlalchemy import ForeignKey
 from sqlalchemy.orm import relationship, backref
 
 
-
+# Model Project 群组 对应表:Project
+# id->唯一标识
+# name->项目名称
+# description->项目描述
+# url->项目的url
 class Project(db.Model):
     __tablename__ = 'Project'
     id = db.Column(db.Integer, primary_key=True)
@@ -18,15 +24,26 @@ class Project(db.Model):
         return jsonify({"name":self.name,"description":self.description,"url":self.url,"id":self.id})
 
 class ProjectAPI(Resource):
-    def get(self,project_id):
+    # 根据项目id获取项目详情
+    def get(self, project_id):
         project = Project.query.get(project_id)
         if not project:
             abort(400)
         else:
             return project.json()
+
+    # 根据项目id删除项目
+    # def delete(self,project_id):
+    #     pass
+
+    # 根据项目id更新项目
+    # def put(self,project_id):
+    #     pass
 api.add_resource(ProjectAPI, '/che/api/v1.0/project/<string:project_id>', endpoint = 'Project')
 
+
 class ProjectsAPI(Resource):
+    #添加项目
     def post(self):
         name = request.json.get('name')
         description = request.json.get('description')
@@ -43,3 +60,7 @@ class ProjectsAPI(Resource):
         db.session.commit()
         return project.json()
 api.add_resource(ProjectsAPI, '/che/api/v1.0/projects', endpoint = 'Projects')
+
+@app.errorhandler(400)
+def bad_request(error):
+    return make_response(jsonify({'error': '缺少参数'}), 400)

@@ -77,7 +77,7 @@ class UsersAPI(Resource):
         if username is None or password is None:
             abort(400)    # missing arguments
         if User.query.filter_by(username=username).first() is not None:
-            abort(400)    # existing user
+            abort(409)    # existing user
         # create workspace
         created_workspace = create_workspace(name)
         workspace_id = created_workspace["id"]
@@ -109,3 +109,12 @@ def get_user(id):
 def get_auth_token():
     token = g.user.generate_auth_token(6000)
     return jsonify({'token': token.decode('ascii'), 'duration': 6000})
+
+
+@app.errorhandler(400)
+def bad_request(error):
+    return make_response(jsonify({'error': '缺少参数'}), 400)
+
+@app.errorhandler(409)
+def duplicate_group(error):
+    return make_response(jsonify({'error': '群组名重复'}), 409)

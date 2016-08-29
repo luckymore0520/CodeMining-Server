@@ -1,3 +1,4 @@
+#coding=utf-8
 from flask import Flask, jsonify, abort, g, make_response, request , url_for
 from flask.ext.restful import Api, Resource, reqparse , fields, marshal
 from app import app ,db , api
@@ -10,6 +11,7 @@ from group import GroupRelation
 from user import User
 from workspace import change_workspace_state
 from workspace import create_project_in_workspace
+
 
 class Exam(db.Model):
     __tablename__ = 'Exam'
@@ -34,7 +36,8 @@ def configExam(exam):
         user = User.query.filter_by(id = relation.user_id).first()
         if user:
             change_workspace_state(user.workspace_id,user.name,1)
-            timer = threading.Timer(5,create_project_in_workspace,(user.workspace_id,project.url,project.name))
+            # TODO 这里现在使用定时器，之后需要使用Block来保证workspace开启后创建项目
+            timer = threading.Timer(10,create_project_in_workspace,(user.workspace_id,project.url,project.name))
             timer.start()
 
 
