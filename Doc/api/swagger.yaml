@@ -1,0 +1,369 @@
+---
+swagger: "2.0"
+info:
+  description: "Coding-Mining 服务端API"
+  version: "1.0.0"
+  title: "Code-Mining API"
+host: "localhost:5000"
+basePath: "/che/api/v1.0"
+schemes:
+- "http"
+produces:
+- "application/json"
+paths:
+  /exams:
+    post:
+      tags:
+      - "Exam"
+      summary: "创建考试"
+      description: "为特定群组创建一次考试，创建完成后该群组所有成员的gitlab会fork一份项目，同时workspace中会出现该项目"
+      operationId: "examsPOST"
+      parameters:
+      - in: "body"
+        name: "exam"
+        description: "考试名称"
+        required: true
+        schema:
+          $ref: "#/definitions/exam"
+      responses:
+        200:
+          description: "返回结果"
+          schema:
+            $ref: "#/definitions/Exam"
+        400:
+          description: "参数缺少"
+          schema:
+            $ref: "#/definitions/Error"
+        default:
+          description: "Unexpected error"
+          schema:
+            $ref: "#/definitions/Error"
+      x-swagger-router-controller: "Exam"
+  /groupRelation:
+    get:
+      tags:
+      - "GroupRelation"
+      summary: "获取群组信息"
+      description: "获取群组中的用户或者获取用户所在群组"
+      operationId: "groupRelationGET"
+      parameters: []
+      responses:
+        200:
+          description: "群组信息列表、用户信息列表"
+          schema:
+            type: "object"
+            properties: {}
+        400:
+          description: "参数缺少"
+          schema:
+            $ref: "#/definitions/Error"
+        default:
+          description: "Unexpected error"
+          schema:
+            $ref: "#/definitions/Error"
+      x-swagger-router-controller: "GroupRelation"
+    post:
+      tags:
+      - "GroupRelation"
+      summary: "用户分组"
+      description: "将某用户加入某一组中"
+      operationId: "groupRelationPOST"
+      parameters:
+      - in: "body"
+        name: "groupRelation"
+        description: "群组成员关系信息"
+        required: true
+        schema:
+          $ref: "#/definitions/groupRelation"
+      responses:
+        200:
+          description: "返回结果"
+          schema:
+            $ref: "#/definitions/SimpleResult"
+        400:
+          description: "参数缺少"
+          schema:
+            $ref: "#/definitions/Error"
+        default:
+          description: "Unexpected error"
+          schema:
+            $ref: "#/definitions/Error"
+      x-swagger-router-controller: "GroupRelation"
+  /groups:
+    get:
+      tags:
+      - "Group"
+      summary: "获取群组"
+      description: "获取全部群组"
+      operationId: "groupsGET"
+      parameters: []
+      responses:
+        200:
+          description: "群组信息列表"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/Group"
+        default:
+          description: "Unexpected error"
+          schema:
+            $ref: "#/definitions/Error"
+      x-swagger-router-controller: "Group"
+    post:
+      tags:
+      - "Group"
+      summary: "创建群组"
+      description: "创建对应群组\n"
+      operationId: "groupsPOST"
+      parameters:
+      - in: "body"
+        name: "group"
+        description: "群组信息"
+        required: true
+        schema:
+          $ref: "#/definitions/group"
+      responses:
+        200:
+          description: "群组具体信息"
+          schema:
+            $ref: "#/definitions/Group"
+        400:
+          description: "参数缺少"
+          schema:
+            $ref: "#/definitions/Error"
+        409:
+          description: "重复名称"
+          schema:
+            $ref: "#/definitions/Error"
+        default:
+          description: "Unexpected error"
+          schema:
+            $ref: "#/definitions/Error"
+      x-swagger-router-controller: "Group"
+  /project/id:
+    get:
+      tags:
+      - "Project"
+      summary: "获取特定项目"
+      description: "根据项目id获取特定项目"
+      operationId: "projectIdGET"
+      parameters: []
+      responses:
+        200:
+          description: "项目详情"
+          schema:
+            $ref: "#/definitions/Project"
+        default:
+          description: "Unexpected error"
+          schema:
+            $ref: "#/definitions/Error"
+      x-swagger-router-controller: "Project"
+  /projects:
+    post:
+      tags:
+      - "Project"
+      summary: "项目"
+      description: "创建某个项目"
+      operationId: "projectsPOST"
+      parameters:
+      - in: "body"
+        name: "project"
+        description: "项目基本信息"
+        required: true
+        schema:
+          $ref: "#/definitions/project"
+      responses:
+        200:
+          description: "创建成功"
+          schema:
+            $ref: "#/definitions/Project"
+        400:
+          description: "参数缺少"
+          schema:
+            $ref: "#/definitions/Error"
+        default:
+          description: "Unexpected error"
+          schema:
+            $ref: "#/definitions/Error"
+      x-swagger-router-controller: "Project"
+  /users:
+    post:
+      tags:
+      - "User"
+      summary: "创建用户"
+      description: "创建对应用户，创建用户的同时会创建其workspace以及gitlab账户\n"
+      operationId: "usersPOST"
+      parameters:
+      - in: "body"
+        name: "user"
+        description: "用户信息"
+        required: true
+        schema:
+          $ref: "#/definitions/user"
+      responses:
+        200:
+          description: "用户具体信息，包含workspaceId"
+          schema:
+            $ref: "#/definitions/User"
+        400:
+          description: "参数缺少"
+          schema:
+            $ref: "#/definitions/Error"
+        409:
+          description: "重复名称"
+          schema:
+            $ref: "#/definitions/Error"
+        default:
+          description: "Unexpected error"
+          schema:
+            $ref: "#/definitions/Error"
+      x-swagger-router-controller: "User"
+  /users/id:
+    get:
+      tags:
+      - "User"
+      summary: "获取特定用户信息"
+      description: "根据id获取特定用户信息"
+      operationId: "usersIdGET"
+      parameters: []
+      responses:
+        200:
+          description: "用户完整信息（不包含密码）"
+          schema:
+            $ref: "#/definitions/User"
+        default:
+          description: "Unexpected error"
+          schema:
+            $ref: "#/definitions/Error"
+      x-swagger-router-controller: "User"
+definitions:
+  User:
+    type: "object"
+    properties:
+      id:
+        type: "string"
+        description: "用户id"
+      username:
+        type: "string"
+        description: "用户名"
+      name:
+        type: "string"
+        description: "用户姓名"
+      workspace_id:
+        type: "string"
+        description: "用户所对应的工作空间id"
+  Group:
+    type: "object"
+    properties:
+      id:
+        type: "string"
+        description: "群组id"
+      name:
+        type: "string"
+        description: "群组名称"
+      description:
+        type: "string"
+        description: "群组描述"
+  Project:
+    type: "object"
+    properties:
+      id:
+        type: "string"
+        description: "项目id"
+      name:
+        type: "string"
+        description: "项目名称"
+      description:
+        type: "string"
+        description: "项目描述"
+      url:
+        type: "string"
+        description: "项目对应的git仓库url"
+  Exam:
+    type: "object"
+    properties:
+      id:
+        type: "string"
+        description: "考试id"
+      name:
+        type: "string"
+        description: "考试名称"
+      description:
+        type: "string"
+        description: "考试描述"
+      group_id:
+        type: "string"
+        description: "考试所对应的群组id"
+      project_id:
+        type: "string"
+        description: "考试所需要的项目id"
+  SimpleResult:
+    type: "object"
+    properties:
+      result:
+        type: "integer"
+        format: "int32"
+      message:
+        type: "string"
+  Error:
+    type: "object"
+    properties:
+      code:
+        type: "integer"
+        format: "int32"
+      message:
+        type: "string"
+      fields:
+        type: "string"
+  exam:
+    properties:
+      name:
+        type: "string"
+        description: "考试名称"
+      description:
+        type: "string"
+        description: "考试描述"
+      group_id:
+        type: "string"
+        description: "群组id"
+      porject_id:
+        type: "string"
+        description: "项目id"
+  groupRelation:
+    properties:
+      user_id:
+        type: "string"
+        description: "用户id"
+      group_id:
+        type: "string"
+        description: "群组id"
+  group:
+    properties:
+      name:
+        type: "string"
+        description: "群组名称"
+      description:
+        type: "string"
+        description: "群组描述"
+  project:
+    properties:
+      name:
+        type: "string"
+        description: "项目名称"
+      description:
+        type: "string"
+        description: "项目描述"
+      url:
+        type: "string"
+        description: "项目原git仓库地址"
+  user:
+    properties:
+      username:
+        type: "string"
+        description: "用户名"
+      password:
+        type: "string"
+        description: "用户密码，这里存储的时候会进行加密"
+      name:
+        type: "string"
+        description: "用户昵称，这里不同于用户名，用于直接显示的用户名称"
