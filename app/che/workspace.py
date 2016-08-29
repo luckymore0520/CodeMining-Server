@@ -7,7 +7,7 @@ from app import config
 import json
 import requests
 import os
-
+import threading
 
 # 调用命令行中的post方法
 # To Do 暂时无法解决为何使用request post会出现内部错误的问题，只能使用命令行的curl执行操作
@@ -33,13 +33,22 @@ def create_workspace(name):
     return post(workspaceUrl,workspace)
 
 
-def create_project_in_workspace(workspace_id, project_url, project_name):
+def create_project_in_workspace(workspace_id, project_url, project_name, retry_time):
+    if retry_time>5:
+        return
     workspace_list =  get_workspace_list(0,1000)
-    print(workspace_list)
     workspace = list(filter(lambda workspace: workspace["id"] == workspace_id,workspace_list))
     if len(workspace) > 0:
-        url = workspace[0]["runtime"]["devMachine"]["runtime"]["servers"]["4401/tcp"]["url"]
-        post('%s/project/%s/import/%s'%(url,workspace_id,project_name),{"location":project_url,"parameters":{},"type":"git"})
+        status = workspace[0]["status"]
+        if status == "RUNNING":
+            url = workspace[0]["runtime"]["devMachine"]["runtime"]["servers"]["4401/tcp"]["url"]
+            print(url)
+            post('%s/project/import/%s'%(url,project_name),{"location":project_url,"parameters":{},"type":"git"})
+        else:
+            print ("workspace not running")
+            timer = threading.Timer(20,create_project_in_workspace,(workspace_id,project.url,project.name, retry_time + 1))
+            timer.start()
+
 
 
 def change_workspace_state(workspace_id, workspace_name, command):

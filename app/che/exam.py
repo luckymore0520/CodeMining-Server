@@ -2,8 +2,6 @@
 from flask import Flask, jsonify, abort, g, make_response, request , url_for
 from flask.ext.restful import Api, Resource, reqparse , fields, marshal
 from app import app ,db , api
-import threading
-import json
 from sqlalchemy import ForeignKey
 from sqlalchemy.orm import relationship, backref
 from project import Project
@@ -11,8 +9,14 @@ from group import GroupRelation
 from user import User
 from workspace import change_workspace_state
 from workspace import create_project_in_workspace
+import json
 
-
+# Model Exam 群组 对应表:Exam
+# id->唯一标识
+# name->考试名称
+# description->考试描述
+# project_id->与项目的关联，即考试所使用到的项目
+# group_id-> 与群组的关键，考试所进行的群组
 class Exam(db.Model):
     __tablename__ = 'Exam'
     id = db.Column(db.Integer, primary_key=True)
@@ -26,7 +30,8 @@ class Exam(db.Model):
 
 
 
-
+# 这里配置考试包括获取群组中的每个成员，在成员所在的workspace中创建项目
+# TODO Gitlab 需要在用户所对应的Gitlab账户中 Fork 该项目
 def configExam(exam):
     project = Project.query.get(exam.project_id)
     if not project:
@@ -35,10 +40,7 @@ def configExam(exam):
     for relation in relations:
         user = User.query.filter_by(id = relation.user_id).first()
         if user:
-            change_workspace_state(user.workspace_id,user.name,1)
-            # TODO 这里现在使用定时器，之后需要使用Block来保证workspace开启后创建项目
-            timer = threading.Timer(10,create_project_in_workspace,(user.workspace_id,project.url,project.name))
-            timer.start()
+            create_project_in_workspace(user.workspace_id, project.url, project.name,0)
 
 
 class ExamsAPI(Resource):
