@@ -7,6 +7,7 @@ from sqlalchemy.orm import relationship, backref
 from project import Project
 from group import GroupRelation
 from user import User
+from tools import SimpleResult
 from workspace import change_workspace_state
 from workspace import create_project_in_workspace
 import json
@@ -26,7 +27,7 @@ class Exam(db.Model):
     group_id = db.Column(db.Integer, ForeignKey('Group.id'))
 
     def json(self):
-        return jsonify({"name":self.name,"description":self.description,"project_id":self.project_id,"group_id":self.group_id,"id":self.id})
+        return {"name":self.name,"description":self.description,"project_id":self.project_id,"group_id":self.group_id,"id":self.id}
 
 
 
@@ -43,7 +44,25 @@ def configExam(exam):
             create_project_in_workspace(user.workspace_id, project.url, project.name,0)
 
 
+class ExamAPI(Resource):
+    def get(self,exam_id):
+        exam = Exam.query.get(exam_id)
+        if not exam:
+            return {}
+        else:
+            return exam.json()
+        pass
+
+    def delete(self, exam_id):
+        exam = Exam.query.get(exam_id)
+        db.session.delete(exam)
+        db.session.commit()
+        return SimpleResult().json()
+
+api.add_resource(ExamAPI, '/che/api/v1.0/exams/<string:exam_id>', endpoint = 'exams')
+
 class ExamsAPI(Resource):
+    #新建一场考试
     def post(self):
         name = request.json.get('name')
         description = request.json.get('description')
@@ -62,4 +81,20 @@ class ExamsAPI(Resource):
         db.session.commit()
         configExam(exam)
         return exam.json()
+
+    #获取考试，若有参数group_id，则或许特定群组的考试，否则获取全部
+    def get(self):
+        group_id = request.args.get('group_id',0)
+        result = []
+        if group_id == 0:
+            result = db.session.query(Exam).all()
+        else:
+            result = Exam.query.filter_by(group_id = group_id)
+        tmp = []
+        print(result)
+        for exam in result:
+            tmp.append(exam.json())
+        return tmp
+
+
 api.add_resource(ExamsAPI, '/che/api/v1.0/exams', endpoint = 'Exams')
