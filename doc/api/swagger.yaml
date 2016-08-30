@@ -1,7 +1,8 @@
 ---
 swagger: "2.0"
 info:
-  description: "Coding-Mining 服务端API"
+  description: "Coding-Mining 服务端API （约定：这里所有的POST请求直接按照Schema中的发出就可，并不需要在外面包起来一个\
+    json）"
   version: "1.0.0"
   title: "Code-Mining API"
 host: "localhost:5000"
@@ -12,6 +13,30 @@ produces:
 - "application/json"
 paths:
   /exams:
+    get:
+      tags:
+      - "Exam"
+      summary: "获取考试列表"
+      description: "参数可选，若为空返回全部考试，或不为空，返回特定群组的考试"
+      operationId: "examsGET"
+      parameters:
+      - name: "group_id"
+        in: "query"
+        description: "群组id"
+        required: false
+        type: "string"
+      responses:
+        200:
+          description: "考试信息列表"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/Exam"
+        default:
+          description: "Unexpected error"
+          schema:
+            $ref: "#/definitions/Error"
+      x-swagger-router-controller: "Exam"
     post:
       tags:
       - "Exam"
@@ -20,11 +45,11 @@ paths:
       operationId: "examsPOST"
       parameters:
       - in: "body"
-        name: "exam"
+        name: "name"
         description: "考试名称"
         required: true
         schema:
-          $ref: "#/definitions/exam"
+          $ref: "#/definitions/name"
       responses:
         200:
           description: "返回结果"
@@ -34,6 +59,41 @@ paths:
           description: "参数缺少"
           schema:
             $ref: "#/definitions/Error"
+        default:
+          description: "Unexpected error"
+          schema:
+            $ref: "#/definitions/Error"
+      x-swagger-router-controller: "Exam"
+  /exams/exam_id:
+    get:
+      tags:
+      - "Exam"
+      summary: "获取指定考试信息"
+      description: "exam_id为考试的id，如果不存在返回空"
+      operationId: "examsExam_idGET"
+      parameters: []
+      responses:
+        200:
+          description: "考试详细信息"
+          schema:
+            $ref: "#/definitions/Exam"
+        default:
+          description: "Unexpected error"
+          schema:
+            $ref: "#/definitions/Error"
+      x-swagger-router-controller: "Exam"
+    delete:
+      tags:
+      - "Exam"
+      summary: "删除指定考试"
+      description: "根据考试id删除指定考试"
+      operationId: "examsExam_idDELETE"
+      parameters: []
+      responses:
+        200:
+          description: "删除结果"
+          schema:
+            $ref: "#/definitions/SimpleResult"
         default:
           description: "Unexpected error"
           schema:
@@ -315,7 +375,7 @@ definitions:
         type: "string"
       fields:
         type: "string"
-  exam:
+  name:
     properties:
       name:
         type: "string"
