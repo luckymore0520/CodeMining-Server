@@ -8,9 +8,8 @@ from passlib.apps import custom_app_context as pwd_context
 from itsdangerous import (TimedJSONWebSignatureSerializer
                           as Serializer, BadSignature, SignatureExpired)
 from app import app,db,api,gl
+from tools import SimpleResult
 import json
-import workspace
-from workspace import create_workspace
 
 auth = HTTPBasicAuth()
 
@@ -19,19 +18,18 @@ auth = HTTPBasicAuth()
 # username->用户名
 # name->用户姓名
 # password_hash->加密后的密码
-# workspace_id->用户对应workspace_id
 # user_groups->与群组的关联，即每个群组中有哪些用户，只是定义一个外键，不存在群组表中
 class User(db.Model):
     __tablename__ = 'User'
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(32), index=True)
-    password_hash = db.Column(db.String(64))
-    workspace_id = db.Column(db.String(32))
+    password_hash = db.Column(db.Text)
     name = db.Column(db.String(32))
+    gitlab_id = db.Column(db.String(32))
     user_groups = relationship("GroupRelation",backref = "User")
 
     def json(self):
-        return {"id":self.id,"username":self.username,"workspace_id":self.workspace_id,"name":self.name}
+        return {"id":self.id,"username":self.username,"name":self.name}
 
     def hash_password(self, password):
         self.password_hash = pwd_context.encrypt(password)
@@ -74,24 +72,25 @@ class UsersAPI(Resource):
         username = request.json.get('username')
         password = request.json.get('password')
         name = request.json.get('name')
+        if len(password) <= 8:
+            return SimpleResult(0,"密码不能少于8位").json();
         if username is None or password is None:
             abort(400)    # missing arguments
         if User.query.filter_by(username=username).first() is not None:
             abort(409)    # existing user
         # create workspace
-        created_workspace = create_workspace(name)
-        glUser = gl.users.create({'email': username+"@njuse.com",
+        glUser = gl.users.create({'email': username+"@mail.smal.nju.edu.cn",
                         'password': password,
                         'username': username,
                         'name': name})
-        workspace_id = created_workspace["id"]
+
         user = User(username=username)
         user.hash_password(password)
         user.name = name
-        user.workspace_id = workspace_id
+        user.gitlab_id = glUser.id
         db.session.add(user)
         db.session.commit()
-        return {'name':user.name,'username': user.username, 'workspace_id':user.workspace_id},
+        return {'name':user.name,'username': user.username,'user_id':user.id},
 
     # 删除用户的同时记得删除workspace
     def delete(self):
@@ -105,7 +104,7 @@ def get_user(id):
     user = User.query.get(id)
     if not user:
         abort(400)
-    return jsonify({'username': user.username, 'name':user.name, 'workospace_id':user.workspace_id})
+    return jsonify({'username': user.username, 'name':user.name, 'user_id':user.user_id})
 
 
 @app.route('/che/api/v1.0/token')

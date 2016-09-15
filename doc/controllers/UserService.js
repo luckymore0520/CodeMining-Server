@@ -6,7 +6,6 @@ exports.usersIdGET = function(args, res, next) {
   **/
     var examples = {};
   examples['application/json'] = {
-  "workspace_id" : "aeiou",
   "name" : "aeiou",
   "id" : "aeiou",
   "username" : "aeiou"
@@ -28,7 +27,6 @@ exports.usersPOST = function(args, res, next) {
   **/
     var examples = {};
   examples['application/json'] = {
-  "workspace_id" : "aeiou",
   "name" : "aeiou",
   "id" : "aeiou",
   "username" : "aeiou"

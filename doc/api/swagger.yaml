@@ -2,7 +2,7 @@
 swagger: "2.0"
 info:
   description: "Coding-Mining 服务端API （约定：这里所有的POST请求直接按照Schema中的发出就可，并不需要在外面包起来一个\
-    json）"
+    json，比如创建用户只需要post一个{'username':'','password':'','name':''}即可）"
   version: "1.0.0"
   title: "Code-Mining API"
 host: "localhost:5000"
@@ -251,7 +251,7 @@ paths:
       tags:
       - "User"
       summary: "创建用户"
-      description: "创建对应用户，创建用户的同时会创建其workspace以及gitlab账户\n"
+      description: "创建对应用户，创建用户的同时会创建其gitlab账户\n"
       operationId: "usersPOST"
       parameters:
       - in: "body"
@@ -309,9 +309,6 @@ definitions:
       name:
         type: "string"
         description: "用户姓名"
-      workspace_id:
-        type: "string"
-        description: "用户所对应的工作空间id"
   Group:
     type: "object"
     properties:
@@ -357,6 +354,17 @@ definitions:
       project_id:
         type: "string"
         description: "考试所需要的项目id"
+      start_time:
+        type: "string"
+        format: "date"
+        description: "开始时间"
+      end_time:
+        type: "string"
+        format: "date"
+        description: "结束时间"
+      cofig:
+        type: "string"
+        description: "考试配置"
   SimpleResult:
     type: "object"
     properties:
@@ -389,6 +397,14 @@ definitions:
       porject_id:
         type: "string"
         description: "项目id"
+      start_date:
+        type: "string"
+        format: "date"
+        description: "开始时间 格式为 2016-09-11 20:00:00 注意月和日必须是2位"
+      end_date:
+        type: "string"
+        format: "date"
+        description: "结束时间"
   groupRelation:
     properties:
       user_id:

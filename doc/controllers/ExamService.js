@@ -25,11 +25,14 @@ exports.examsExam_idGET = function(args, res, next) {
   **/
     var examples = {};
   examples['application/json'] = {
+  "start_time" : "2000-01-23T04:56:07.000+00:00",
   "group_id" : "aeiou",
   "project_id" : "aeiou",
   "name" : "aeiou",
+  "end_time" : "2000-01-23T04:56:07.000+00:00",
   "description" : "aeiou",
-  "id" : "aeiou"
+  "id" : "aeiou",
+  "cofig" : "aeiou"
 };
   if(Object.keys(examples).length > 0) {
     res.setHeader('Content-Type', 'application/json');
@@ -48,11 +51,14 @@ exports.examsGET = function(args, res, next) {
   **/
     var examples = {};
   examples['application/json'] = [ {
+  "start_time" : "2000-01-23T04:56:07.000+00:00",
   "group_id" : "aeiou",
   "project_id" : "aeiou",
   "name" : "aeiou",
+  "end_time" : "2000-01-23T04:56:07.000+00:00",
   "description" : "aeiou",
-  "id" : "aeiou"
+  "id" : "aeiou",
+  "cofig" : "aeiou"
 } ];
   if(Object.keys(examples).length > 0) {
     res.setHeader('Content-Type', 'application/json');
@@ -71,11 +77,14 @@ exports.examsPOST = function(args, res, next) {
   **/
     var examples = {};
   examples['application/json'] = {
+  "start_time" : "2000-01-23T04:56:07.000+00:00",
   "group_id" : "aeiou",
   "project_id" : "aeiou",
   "name" : "aeiou",
+  "end_time" : "2000-01-23T04:56:07.000+00:00",
   "description" : "aeiou",
-  "id" : "aeiou"
+  "id" : "aeiou",
+  "cofig" : "aeiou"
 };
   if(Object.keys(examples).length > 0) {
     res.setHeader('Content-Type', 'application/json');

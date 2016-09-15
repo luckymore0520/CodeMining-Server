@@ -1,15 +1,14 @@
 #coding=utf-8
 from flask import Flask, jsonify, abort, g, make_response, request , url_for
 from flask.ext.restful import Api, Resource, reqparse , fields, marshal
-from app import app ,db , api
+from app import app ,db , api,gl
 from sqlalchemy import ForeignKey
 from sqlalchemy.orm import relationship, backref
 from project import Project
 from group import GroupRelation
 from user import User
 from tools import SimpleResult
-from workspace import change_workspace_state
-from workspace import create_project_in_workspace
+from datetime import datetime
 import json
 
 # Model Exam 群组 对应表:Exam
@@ -25,13 +24,16 @@ class Exam(db.Model):
     description = db.Column(db.Text)
     project_id = db.Column(db.Integer, ForeignKey('Project.id'))
     group_id = db.Column(db.Integer, ForeignKey('Group.id'))
+    start_date = db.Column(db.Date)
+    end_date = db.Column(db.Date)
+    config = db.Column(db.Text)
+
 
     def json(self):
-        return {"name":self.name,"description":self.description,"project_id":self.project_id,"group_id":self.group_id,"id":self.id}
+        return {"name":self.name,"description":self.description,"project_id":self.project_id,"group_id":self.group_id,"id":self.id,"start_date":self.start_date.strftime('%Y-%m-%d %H:%M:%S'),"end_date":self.end_date.strftime('%Y-%m-%d %H:%M:%S'), "config":self.config}
 
 
 
-# 这里配置考试包括获取群组中的每个成员，在成员所在的workspace中创建项目
 # TODO Gitlab 需要在用户所对应的Gitlab账户中 Fork 该项目
 def configExam(exam):
     project = Project.query.get(exam.project_id)
@@ -40,8 +42,7 @@ def configExam(exam):
     relations = GroupRelation.query.filter_by(group_id = exam.group_id).all()
     for relation in relations:
         user = User.query.filter_by(id = relation.user_id).first()
-        if user:
-            create_project_in_workspace(user.workspace_id, project.url, project.name,0)
+        gl.user_projects.create({'name':project.name,'user_id':user.gitlab_id})
 
 
 class ExamAPI(Resource):
@@ -68,6 +69,9 @@ class ExamsAPI(Resource):
         description = request.json.get('description')
         project_id = request.json.get('project_id')
         group_id = request.json.get('group_id')
+        start_date = request.json.get('start_date')
+        end_date = request.json.get('end_date');
+
         if name is None or project_id is None or group_id is None:
             abort(400)    # missing arguments
         if Exam.query.filter_by(name=name).first() is not None:
@@ -77,6 +81,9 @@ class ExamsAPI(Resource):
         exam.description = description
         exam.project_id = project_id
         exam.group_id = group_id
+        exam.start_date = datetime.strptime(start_date,'%Y-%m-%d %H:%M:%S')
+        exam.end_date = datetime.strptime(end_date,'%Y-%m-%d %H:%M:%S')
+        exam.config = "会是一段json配置，需要显示给学生"
         db.session.add(exam)
         db.session.commit()
         configExam(exam)

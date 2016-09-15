@@ -13,7 +13,6 @@ app.config['SECRET_KEY'] = 'the quick brown fox jumps over the lazy dog'
 db = SQLAlchemy(app)
 gl = gitlab.Gitlab('http://115.29.184.56:10080', 'A3BUxxUb2jNxEUxtxN3P')
 from app import views
-import che.workspace
 import che.user
 import che.group
 import che.exam
