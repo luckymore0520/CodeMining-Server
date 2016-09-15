@@ -73,7 +73,7 @@ exports.examsGET = function(args, res, next) {
 exports.examsPOST = function(args, res, next) {
   /**
    * parameters expected in the args:
-  * name (Name)
+  * json (Json)
   **/
     var examples = {};
   examples['application/json'] = {

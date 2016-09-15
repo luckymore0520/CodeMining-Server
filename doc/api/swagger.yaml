@@ -1,11 +1,10 @@
 ---
 swagger: "2.0"
 info:
-  description: "Coding-Mining 服务端API （约定：这里所有的POST请求直接按照Schema中的发出就可，并不需要在外面包起来一个\
-    json，比如创建用户只需要post一个{'username':'','password':'','name':''}即可）"
+  description: "Coding-Mining 服务端API"
   version: "1.0.0"
   title: "Code-Mining API"
-host: "localhost:5000"
+host: "115.29.184.56:8080"
 basePath: "/che/api/v1.0"
 schemes:
 - "http"
@@ -45,11 +44,11 @@ paths:
       operationId: "examsPOST"
       parameters:
       - in: "body"
-        name: "name"
+        name: "json"
         description: "考试名称"
         required: true
         schema:
-          $ref: "#/definitions/name"
+          $ref: "#/definitions/json"
       responses:
         200:
           description: "返回结果"
@@ -130,11 +129,11 @@ paths:
       operationId: "groupRelationPOST"
       parameters:
       - in: "body"
-        name: "groupRelation"
+        name: "json"
         description: "群组成员关系信息"
         required: true
         schema:
-          $ref: "#/definitions/groupRelation"
+          $ref: "#/definitions/json_1"
       responses:
         200:
           description: "返回结果"
@@ -177,11 +176,11 @@ paths:
       operationId: "groupsPOST"
       parameters:
       - in: "body"
-        name: "group"
+        name: "json"
         description: "群组信息"
         required: true
         schema:
-          $ref: "#/definitions/group"
+          $ref: "#/definitions/json_2"
       responses:
         200:
           description: "群组具体信息"
@@ -227,11 +226,11 @@ paths:
       operationId: "projectsPOST"
       parameters:
       - in: "body"
-        name: "project"
+        name: "json"
         description: "项目基本信息"
         required: true
         schema:
-          $ref: "#/definitions/project"
+          $ref: "#/definitions/json_3"
       responses:
         200:
           description: "创建成功"
@@ -255,11 +254,11 @@ paths:
       operationId: "usersPOST"
       parameters:
       - in: "body"
-        name: "user"
+        name: "json"
         description: "用户信息"
         required: true
         schema:
-          $ref: "#/definitions/user"
+          $ref: "#/definitions/json_4"
       responses:
         200:
           description: "用户具体信息，包含workspaceId"
@@ -383,7 +382,7 @@ definitions:
         type: "string"
       fields:
         type: "string"
-  name:
+  json:
     properties:
       name:
         type: "string"
@@ -405,7 +404,7 @@ definitions:
         type: "string"
         format: "date"
         description: "结束时间"
-  groupRelation:
+  json_1:
     properties:
       user_id:
         type: "string"
@@ -413,7 +412,7 @@ definitions:
       group_id:
         type: "string"
         description: "群组id"
-  group:
+  json_2:
     properties:
       name:
         type: "string"
@@ -421,7 +420,7 @@ definitions:
       description:
         type: "string"
         description: "群组描述"
-  project:
+  json_3:
     properties:
       name:
         type: "string"
@@ -432,7 +431,7 @@ definitions:
       url:
         type: "string"
         description: "项目原git仓库地址"
-  user:
+  json_4:
     properties:
       username:
         type: "string"

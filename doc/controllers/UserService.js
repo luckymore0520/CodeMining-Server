@@ -23,7 +23,7 @@ exports.usersIdGET = function(args, res, next) {
 exports.usersPOST = function(args, res, next) {
   /**
    * parameters expected in the args:
-  * user (User)
+  * json (Json_4)
   **/
     var examples = {};
   examples['application/json'] = {
