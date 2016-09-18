@@ -75,7 +75,7 @@ class GroupRelationAPI(Resource):
     def get(self):
         user_id = request.args.get('user_id',0)
         group_id = request.args.get('group_id',0)
-
+        
         if user_id != 0:
             relations = GroupRelation.query.filter_by(user_id=user_id)
             groups = []

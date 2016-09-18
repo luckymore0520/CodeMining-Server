@@ -103,15 +103,24 @@ paths:
       tags:
       - "GroupRelation"
       summary: "获取群组信息"
-      description: "获取群组中的用户或者获取用户所在群组"
+      description: "获取群组中的用户或者获取用户所在群组，传user_id返回群组列表，传group_id返回用户列表"
       operationId: "groupRelationGET"
-      parameters: []
+      parameters:
+      - name: "user_id"
+        in: "query"
+        description: "用户id"
+        required: false
+        type: "string"
+      - name: "group_id"
+        in: "query"
+        description: "群组id"
+        required: false
+        type: "string"
       responses:
         200:
           description: "群组信息列表、用户信息列表"
           schema:
-            type: "object"
-            properties: {}
+            $ref: "#/definitions/RelationShipResult"
         400:
           description: "参数缺少"
           schema:
@@ -296,6 +305,19 @@ paths:
             $ref: "#/definitions/Error"
       x-swagger-router-controller: "User"
 definitions:
+  RelationShipResult:
+    type: "object"
+    properties:
+      users:
+        type: "array"
+        description: "用户列表"
+        items:
+          $ref: "#/definitions/User"
+      groups:
+        type: "array"
+        description: "群组列表"
+        items:
+          $ref: "#/definitions/Group"
   User:
     type: "object"
     properties:

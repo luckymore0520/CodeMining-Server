@@ -880,6 +880,25 @@ margin-bottom: 20px;
     }
   }
 };
+  defs.RelationShipResult = {
+  "type" : "object",
+  "properties" : {
+    "users" : {
+      "type" : "array",
+      "description" : "用户列表",
+      "items" : {
+        "$ref" : "#/definitions/User"
+      }
+    },
+    "groups" : {
+      "type" : "array",
+      "description" : "群组列表",
+      "items" : {
+        "$ref" : "#/definitions/Group"
+      }
+    }
+  }
+};
   defs.SimpleResult = {
   "type" : "object",
   "properties" : {
@@ -3860,7 +3879,7 @@ try {
                                             <div class="clearfix"></div>
 
                                             <p></p>
-                                            <p>获取群组中的用户或者获取用户所在群组</p>
+                                            <p>获取群组中的用户或者获取用户所在群组，传user_id返回群组列表，传group_id返回用户列表</p>
                                             <p></p>
                                             <br />
 
@@ -3903,7 +3922,7 @@ try {
                                             <div class="tab-content">
                                                 <div class="tab-pane active" id="examples-GroupRelation-groupRelationGet-0-curl">
                                                     <pre class="prettyprint"><code class="language-bsh">
-curl -X <span style="text-transform: uppercase;">get</span> -H "apiKey: [[apiKey]]" -H "apiSecret: [[apiSecret]]" "http://115.29.184.56:8080/che/api/v1.0/groupRelation"
+curl -X <span style="text-transform: uppercase;">get</span> -H "apiKey: [[apiKey]]" -H "apiSecret: [[apiSecret]]" "http://115.29.184.56:8080/che/api/v1.0/groupRelation?userId=&groupId="
 
 
 </code></pre>
@@ -3924,8 +3943,10 @@ public class GroupRelationApiExample {
     public static void main(String[] args) {
         
         GroupRelationApi apiInstance = new GroupRelationApi();
+        String userId = userId_example; // String | 用户id
+        String groupId = groupId_example; // String | 群组id
         try {
-            Object result = apiInstance.groupRelationGet();
+            RelationShipResult result = apiInstance.groupRelationGet(userId, groupId);
             System.out.println(result);
         } catch (ApiException e) {
             System.err.println("Exception when calling GroupRelationApi#groupRelationGet");
@@ -3946,8 +3967,10 @@ public class GroupRelationApiExample {
 
     public static void main(String[] args) {
         GroupRelationApi apiInstance = new GroupRelationApi();
+        String userId = userId_example; // String | 用户id
+        String groupId = groupId_example; // String | 群组id
         try {
-            Object result = apiInstance.groupRelationGet();
+            RelationShipResult result = apiInstance.groupRelationGet(userId, groupId);
             System.out.println(result);
         } catch (ApiException e) {
             System.err.println("Exception when calling GroupRelationApi#groupRelationGet");
@@ -3968,12 +3991,15 @@ public class GroupRelationApiExample {
                                                 <div class="tab-pane" id="examples-GroupRelation-groupRelationGet-0-objc">
                                                     <pre class="prettyprint"><code class="language-cpp">
 
+String *userId = userId_example; // 用户id (optional)
+String *groupId = groupId_example; // 群组id (optional)
 
 GroupRelationApi *apiInstance = [[GroupRelationApi alloc] init];
 
 // 获取群组信息
-[apiInstance groupRelationGetWithCompletionHandler: 
-              ^(Object output, NSError* error) {
+[apiInstance groupRelationGetWith:userId
+    groupId:groupId
+              completionHandler: ^(RelationShipResult output, NSError* error) {
                             if (output) {
                                 NSLog(@"%@", output);
                             }
@@ -3990,6 +4016,11 @@ var  = require('');
 
 var api = new .GroupRelationApi()
 
+var opts = { 
+  'userId': userId_example, // {String} 用户id
+  'groupId': groupId_example // {String} 群组id
+};
+
 var callback = function(error, data, response) {
   if (error) {
     console.error(error);
@@ -3997,7 +4028,7 @@ var callback = function(error, data, response) {
     console.log('API called successfully. Returned data: ' + data);
   }
 };
-api.groupRelationGet(callback);
+api.groupRelationGet(opts, callback);
 
                                                     </code></pre>
                                                 </div>
@@ -4022,11 +4053,13 @@ namespace Example
         {
             
             var apiInstance = new GroupRelationApi();
+            var userId = userId_example;  // String | 用户id (optional) 
+            var groupId = groupId_example;  // String | 群组id (optional) 
 
             try
             {
                 // 获取群组信息
-                Object result = apiInstance.groupRelationGet();
+                RelationShipResult result = apiInstance.groupRelationGet(userId, groupId);
                 Debug.WriteLine(result);
             }
             catch (Exception e)
@@ -4047,9 +4080,11 @@ namespace Example
 require_once(__DIR__ . '/vendor/autoload.php');
 
 $api_instance = new io.swagger.client\Api\GroupRelationApi();
+$userId = userId_example; // String | 用户id
+$groupId = groupId_example; // String | 群组id
 
 try {
-    $result = $api_instance->groupRelationGet();
+    $result = $api_instance->groupRelationGet($userId, $groupId);
     print_r($result);
 } catch (Exception $e) {
     echo 'Exception when calling GroupRelationApi->groupRelationGet: ', $e->getMessage(), PHP_EOL;
@@ -4072,6 +4107,80 @@ try {
 
 
 
+                                                <div class="methodsubtabletitle">Query parameters</div>
+                                                <table id="methodsubtable">
+                                                    <tr>
+                                                        <th width="150px">Name</th>
+                                                        <th>Description</th>
+                                                    </tr>
+                                                    <!---->
+                                                        <tr><td style="width:150px;">userId</td>
+<td>
+
+
+<script>
+												$(document).ready(function() {
+													var schemaWrapper = {
+  "name" : "user_id",
+  "in" : "query",
+  "description" : "用户id",
+  "required" : false,
+  "type" : "string"
+};
+													var schema = schemaWrapper;
+
+
+
+
+													var view = new JSONSchemaView(schema,0);
+													var result = $('#d2e199_groupRelationGet_userId');
+													result.empty();
+													result.append(view.render());
+
+
+
+
+
+												});
+												</script>
+												<div id="d2e199_groupRelationGet_userId"></div>
+</td>
+</tr>
+
+                                                        <tr><td style="width:150px;">groupId</td>
+<td>
+
+
+<script>
+												$(document).ready(function() {
+													var schemaWrapper = {
+  "name" : "group_id",
+  "in" : "query",
+  "description" : "群组id",
+  "required" : false,
+  "type" : "string"
+};
+													var schema = schemaWrapper;
+
+
+
+
+													var view = new JSONSchemaView(schema,0);
+													var result = $('#d2e199_groupRelationGet_groupId');
+													result.empty();
+													result.append(view.render());
+
+
+
+
+
+												});
+												</script>
+												<div id="d2e199_groupRelationGet_groupId"></div>
+</td>
+</tr>
+
+                                                </table>
 
                                             <h2>Responses</h2>
 
@@ -4108,8 +4217,7 @@ try {
                                                                     var schemaWrapper = {
   "description" : "群组信息列表、用户信息列表",
   "schema" : {
-    "type" : "object",
-    "properties" : { }
+    "$ref" : "#/definitions/RelationShipResult"
   }
 };
                                                                     var schema = schemaWrapper.schema;
@@ -6872,7 +6980,7 @@ try {
             </div>
             <div id="generator">
                 <div class="content">
-                    Generated 2016-09-15T15:59:45.961Z
+                    Generated 2016-09-18T08:57:06.162Z
                 </div>
             </div>
         </div>
