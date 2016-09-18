@@ -1,7 +1,7 @@
 {
   "name": "code-mining-api",
   "version": "1.0.0",
-  "description": "Coding-Mining 服务端API （约定：这里所有的POST请求直接按照Schema中的发出就可，并不需要在外面包起来一个json，比如创建用户只需要post一个{'username':'','password':'','name':''}即可）",
+  "description": "Coding-Mining 服务端API",
   "main": "index.js",
   "scripts": {
 	"prestart": "npm install",

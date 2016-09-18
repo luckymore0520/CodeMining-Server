@@ -19,7 +19,7 @@ exports.groupRelationGET = function(args, res, next) {
 exports.groupRelationPOST = function(args, res, next) {
   /**
    * parameters expected in the args:
-  * groupRelation (GroupRelation)
+  * json (Json_1)
   **/
     var examples = {};
   examples['application/json'] = {

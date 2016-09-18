@@ -23,7 +23,7 @@ exports.groupsGET = function(args, res, next) {
 exports.groupsPOST = function(args, res, next) {
   /**
    * parameters expected in the args:
-  * group (Group)
+  * json (Json_2)
   **/
     var examples = {};
   examples['application/json'] = {

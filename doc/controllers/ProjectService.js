@@ -24,7 +24,7 @@ exports.projectIdGET = function(args, res, next) {
 exports.projectsPOST = function(args, res, next) {
   /**
    * parameters expected in the args:
-  * project (Project)
+  * json (Json_3)
   **/
     var examples = {};
   examples['application/json'] = {
