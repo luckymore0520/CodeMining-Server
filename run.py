@@ -2,4 +2,4 @@
 from app import app,db,gl
 db.create_all()
 gl.auth()
-app.run(debug = True)
+app.run(host='0.0.0.0',port=8080)
