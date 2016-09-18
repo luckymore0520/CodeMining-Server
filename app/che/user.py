@@ -104,7 +104,7 @@ def get_user(id):
     user = User.query.get(id)
     if not user:
         abort(400)
-    return jsonify({'username': user.username, 'name':user.name, 'user_id':user.user_id})
+    return jsonify({'username': user.username, 'name':user.name, 'user_id':user.id})
 
 
 @app.route('/che/api/v1.0/token')
