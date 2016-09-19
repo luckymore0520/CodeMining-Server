@@ -24,8 +24,8 @@ class Exam(db.Model):
     description = db.Column(db.Text)
     project_id = db.Column(db.Integer, ForeignKey('Project.id'))
     group_id = db.Column(db.Integer, ForeignKey('Group.id'))
-    start_date = db.Column(db.Date)
-    end_date = db.Column(db.Date)
+    start_date = db.Column(db.DateTime)
+    end_date = db.Column(db.DateTime)
     config = db.Column(db.Text)
 
 
@@ -84,9 +84,9 @@ class ExamsAPI(Resource):
         exam.start_date = datetime.strptime(start_date,'%Y-%m-%d %H:%M:%S')
         exam.end_date = datetime.strptime(end_date,'%Y-%m-%d %H:%M:%S')
         exam.config = "会是一段json配置，需要显示给学生"
+        configExam(exam)
         db.session.add(exam)
         db.session.commit()
-        configExam(exam)
         return exam.json()
 
     #获取考试，若有参数group_id，则或许特定群组的考试，否则获取全部
