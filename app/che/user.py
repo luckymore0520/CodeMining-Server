@@ -90,7 +90,7 @@ class UsersAPI(Resource):
         user.gitlab_id = glUser.id
         db.session.add(user)
         db.session.commit()
-        return {'name':user.name,'username': user.username,'user_id':user.id},200
+        return user.json(),200
 
 
     def get(self):
@@ -115,7 +115,7 @@ def get_user(id):
     user = User.query.get(id)
     if not user:
         abort(400)
-    return jsonify({'username': user.username, 'name':user.name, 'user_id':user.id})
+    return jsonify({'username': user.username, 'name':user.name, 'id':user.id})
 
 
 @app.route('/che/api/v1.0/token')
