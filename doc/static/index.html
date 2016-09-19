@@ -978,10 +978,16 @@ margin-bottom: 20px;
                                     <li data-group="Project" data-name="projectIdGet" class="">
                                         <a href="#api-Project-projectIdGet">projectIdGet</a>
                                     </li>
+                                    <li data-group="Project" data-name="projectsGet" class="">
+                                        <a href="#api-Project-projectsGet">projectsGet</a>
+                                    </li>
                                     <li data-group="Project" data-name="projectsPost" class="">
                                         <a href="#api-Project-projectsPost">projectsPost</a>
                                     </li>
                                 <li class="nav-header" data-group="User"><a href="#api-User">API Methods - User</a></li>
+                                    <li data-group="User" data-name="usersGet" class="">
+                                        <a href="#api-User-usersGet">usersGet</a>
+                                    </li>
                                     <li data-group="User" data-name="usersIdGet" class="">
                                         <a href="#api-User-usersIdGet">usersIdGet</a>
                                     </li>
@@ -5389,6 +5395,412 @@ try {
 
 
 
+                                    <div id="api-Project-projectsGet">
+
+                                        <article id="api-Project-projectsGet-0" data-group="User" data-name="projectsGet" data-version="0">
+                                            <div class="pull-left">
+                                                <h1>projectsGet</h1>
+                                            </div>
+                                            <div class="pull-right">
+
+                                            </div>
+                                            <div class="clearfix"></div>
+
+                                            <p></p>
+                                            <p>获取所有项目</p>
+                                            <p></p>
+                                            <br />
+
+                                            <pre class="prettyprint language-html prettyprinted" data-type="get"><code><span class="pln">/projects</span></code></pre>
+
+                                            <p>
+                                                <h3>Usage and SDK Samples</h3>
+                                            </p>
+
+                                            <ul class="nav nav-tabs nav-tabs-examples">
+                                                <li class="active">
+                                                    <a href="#examples-Project-projectsGet-0-curl">Curl</a>
+                                                </li>
+                                                <li class="">
+              <a href="#examples-Project-projectsGet-0-java">Java</a>
+            </li>
+            <li class="">
+              <a href="#examples-Project-projectsGet-0-android">Android</a>
+            </li>
+            <!--<li class="">
+              <a href="#examples-Project-projectsGet-0-groovy">Groovy</a>
+            </li>-->
+                                                <li class="">
+                                                    <a href="#examples-Project-projectsGet-0-objc">Obj-C</a>
+                                                </li>
+                                                <li class="">
+                                                    <a href="#examples-Project-projectsGet-0-javascript">JavaScript</a>
+                                                </li>
+                                                <!--<li class="">
+              <a href="#examples-Project-projectsGet-0-angular">Angular</a>
+            </li>-->
+                                                <li class="">
+                                                    <a href="#examples-Project-projectsGet-0-csharp">C#</a>
+                                                </li>
+                                                <li class="">
+              <a href="#examples-Project-projectsGet-0-php">PHP</a>
+            </li>
+                                            </ul>
+
+                                            <div class="tab-content">
+                                                <div class="tab-pane active" id="examples-Project-projectsGet-0-curl">
+                                                    <pre class="prettyprint"><code class="language-bsh">
+curl -X <span style="text-transform: uppercase;">get</span> -H "apiKey: [[apiKey]]" -H "apiSecret: [[apiSecret]]" "http://115.29.184.56:8080/che/api/v1.0/projects"
+
+
+</code></pre>
+                                                </div>
+
+                                                <div class="tab-pane" id="examples-Project-projectsGet-0-java">
+                                                  <pre class="prettyprint"><code class="language-java">
+import io.swagger.client.*;
+import io.swagger.client.auth.*;
+import io.swagger.client.model.*;
+import .ProjectApi;
+
+import java.io.File;
+import java.util.*;
+
+public class ProjectApiExample {
+
+    public static void main(String[] args) {
+        
+        ProjectApi apiInstance = new ProjectApi();
+        try {
+            array[Project] result = apiInstance.projectsGet();
+            System.out.println(result);
+        } catch (ApiException e) {
+            System.err.println("Exception when calling ProjectApi#projectsGet");
+            e.printStackTrace();
+        }
+    }
+}
+
+                                                  </code></pre>
+          </div>
+
+
+                                                <div class="tab-pane" id="examples-Project-projectsGet-0-android">
+                                                  <pre class="prettyprint"><code class="language-java">
+import .ProjectApi;
+
+public class ProjectApiExample {
+
+    public static void main(String[] args) {
+        ProjectApi apiInstance = new ProjectApi();
+        try {
+            array[Project] result = apiInstance.projectsGet();
+            System.out.println(result);
+        } catch (ApiException e) {
+            System.err.println("Exception when calling ProjectApi#projectsGet");
+            e.printStackTrace();
+        }
+    }
+}
+
+                                                  </code></pre>
+          </div>
+
+          <!--
+          <div class="tab-pane" id="examples-Project-projectsGet-0-groovy">
+            <pre class="prettyprint language-json prettyprinted" data-type="json"><code>Coming Soon!</code></pre>
+          </div> -->
+
+
+                                                <div class="tab-pane" id="examples-Project-projectsGet-0-objc">
+                                                    <pre class="prettyprint"><code class="language-cpp">
+
+
+ProjectApi *apiInstance = [[ProjectApi alloc] init];
+
+// 获取所有项目
+[apiInstance projectsGetWithCompletionHandler: 
+              ^(array[Project] output, NSError* error) {
+                            if (output) {
+                                NSLog(@"%@", output);
+                            }
+                            if (error) {
+                                NSLog(@"Error: %@", error);
+                            }
+                        }];
+
+                                                    </code></pre>
+                                                </div>
+                                                <div class="tab-pane" id="examples-Project-projectsGet-0-javascript">
+                                                    <pre class="prettyprint"><code class="language-js">
+var  = require('');
+
+var api = new .ProjectApi()
+
+var callback = function(error, data, response) {
+  if (error) {
+    console.error(error);
+  } else {
+    console.log('API called successfully. Returned data: ' + data);
+  }
+};
+api.projectsGet(callback);
+
+                                                    </code></pre>
+                                                </div>
+
+                                                <!--<div class="tab-pane" id="examples-Project-projectsGet-0-angular">
+            <pre class="prettyprint language-json prettyprinted" data-type="json"><code>Coming Soon!</code></pre>
+          </div>-->
+
+                                                <div class="tab-pane" id="examples-Project-projectsGet-0-csharp">
+                                                    <pre class="prettyprint"><code class="language-cs">
+using System;
+using System.Diagnostics;
+using .Api;
+using .Client;
+using ;
+
+namespace Example
+{
+    public class projectsGetExample
+    {
+        public void main()
+        {
+            
+            var apiInstance = new ProjectApi();
+
+            try
+            {
+                // 获取所有项目
+                array[Project] result = apiInstance.projectsGet();
+                Debug.WriteLine(result);
+            }
+            catch (Exception e)
+            {
+                Debug.Print("Exception when calling ProjectApi.projectsGet: " + e.Message );
+            }
+        }
+    }
+}
+
+                                                    </code></pre>
+                                                </div>
+
+
+                                                <div class="tab-pane" id="examples-Project-projectsGet-0-php">
+                                                  <pre class="prettyprint"><code class="language-php">
+<?php
+require_once(__DIR__ . '/vendor/autoload.php');
+
+$api_instance = new io.swagger.client\Api\ProjectApi();
+
+try {
+    $result = $api_instance->projectsGet();
+    print_r($result);
+} catch (Exception $e) {
+    echo 'Exception when calling ProjectApi->projectsGet: ', $e->getMessage(), PHP_EOL;
+}
+
+                                                  </code></pre>
+          </div>
+
+                                            </div>
+
+
+
+
+
+                                            <h2>Parameters</h2>
+
+
+
+
+
+
+
+
+                                            <h2>Responses</h2>
+
+                                                <h3> Status: 200 - 项目列表 </h3>
+
+                                                <ul class="nav nav-tabs nav-tabs-examples" >
+
+                                                    <li class="active">
+                                                        <a href="#examples-Project-projectsGet-schema">Schema</a>
+                                                    </li>
+
+
+                                                </ul>
+
+
+
+
+
+
+
+                                                <div class="tab-content" style='margin-bottom: 10px;'>
+
+
+
+                                                    <div class="tab-pane active" id="examples-Project-projectsGet-schema">
+
+
+
+
+                                                        <div id='examples-Project-projectsGet-schema-200' style="padding: 30px; border-left: 1px solid #eee; border-right: 1px solid #eee; border-bottom: 1px solid #eee;">
+
+                                                            <script>
+                                                                $(document).ready(function() {
+                                                                    var schemaWrapper = {
+  "description" : "项目列表",
+  "schema" : {
+    "type" : "array",
+    "items" : {
+      "$ref" : "#/definitions/Project"
+    }
+  }
+};
+                                                                    var schema = schemaWrapper.schema;
+                                                                    schemaWrapper.definitions = defs;
+                                                                    //console.log(JSON.stringify(schema))
+                                                                    JsonRefs.resolveRefs(schemaWrapper, {
+                                                                        "depth": 3,
+                                                                        "resolveRemoteRefs": false,
+                                                                        "resolveFileRefs": false
+                                                                    }, function(err, resolved, metadata) {
+
+                                                                        //console.log(JSON.stringify(resolved));
+
+
+
+                                                                        var view = new JSONSchemaView(resolved.schema, 3);
+                                                                        $('#examples-Project-projectsGet-schema-data').val(JSON.stringify(resolved.schema));
+                                                                        var result = $('#examples-Project-projectsGet-schema-200');
+                                                                        result.empty();
+                                                                        result.append(view.render());
+                                                                    });
+
+
+
+
+                                                                });
+                                                            </script>
+                                                        </div>
+                                                        <input id='examples-Project-projectsGet-schema-data' type='hidden' value=''></input>
+
+
+
+
+
+
+                                                    </div>
+
+
+
+
+                                                </div>
+
+
+
+
+                                                <h3> Status: 0 - Unexpected error </h3>
+
+                                                <ul class="nav nav-tabs nav-tabs-examples" >
+
+                                                    <li class="active">
+                                                        <a href="#examples-Project-projectsGet-schema">Schema</a>
+                                                    </li>
+
+
+                                                </ul>
+
+
+
+
+
+
+
+                                                <div class="tab-content" style='margin-bottom: 10px;'>
+
+
+
+                                                    <div class="tab-pane active" id="examples-Project-projectsGet-schema">
+
+
+
+
+                                                        <div id='examples-Project-projectsGet-schema-0' style="padding: 30px; border-left: 1px solid #eee; border-right: 1px solid #eee; border-bottom: 1px solid #eee;">
+
+                                                            <script>
+                                                                $(document).ready(function() {
+                                                                    var schemaWrapper = {
+  "description" : "Unexpected error",
+  "schema" : {
+    "$ref" : "#/definitions/Error"
+  }
+};
+                                                                    var schema = schemaWrapper.schema;
+                                                                    schemaWrapper.definitions = defs;
+                                                                    //console.log(JSON.stringify(schema))
+                                                                    JsonRefs.resolveRefs(schemaWrapper, {
+                                                                        "depth": 3,
+                                                                        "resolveRemoteRefs": false,
+                                                                        "resolveFileRefs": false
+                                                                    }, function(err, resolved, metadata) {
+
+                                                                        //console.log(JSON.stringify(resolved));
+
+
+
+                                                                        var view = new JSONSchemaView(resolved.schema, 3);
+                                                                        $('#examples-Project-projectsGet-schema-data').val(JSON.stringify(resolved.schema));
+                                                                        var result = $('#examples-Project-projectsGet-schema-0');
+                                                                        result.empty();
+                                                                        result.append(view.render());
+                                                                    });
+
+
+
+
+                                                                });
+                                                            </script>
+                                                        </div>
+                                                        <input id='examples-Project-projectsGet-schema-data' type='hidden' value=''></input>
+
+
+
+
+
+
+                                                    </div>
+
+
+
+
+                                                </div>
+
+
+
+
+
+
+
+
+
+                                        </article>
+
+                                    </div>
+
+                                    <hr>
+
+
+
+
+
+
+
+
                                     <div id="api-Project-projectsPost">
 
                                         <article id="api-Project-projectsPost-0" data-group="User" data-name="projectsPost" data-version="0">
@@ -5929,6 +6341,502 @@ try {
 
                             <section id="api-User">
                                 <h1>User</h1>
+
+
+
+
+
+
+
+                                    <div id="api-User-usersGet">
+
+                                        <article id="api-User-usersGet-0" data-group="User" data-name="usersGet" data-version="0">
+                                            <div class="pull-left">
+                                                <h1>usersGet</h1>
+                                            </div>
+                                            <div class="pull-right">
+
+                                            </div>
+                                            <div class="clearfix"></div>
+
+                                            <p></p>
+                                            <p>按照 page 和 limit 获取用户列表</p>
+                                            <p></p>
+                                            <br />
+
+                                            <pre class="prettyprint language-html prettyprinted" data-type="get"><code><span class="pln">/users</span></code></pre>
+
+                                            <p>
+                                                <h3>Usage and SDK Samples</h3>
+                                            </p>
+
+                                            <ul class="nav nav-tabs nav-tabs-examples">
+                                                <li class="active">
+                                                    <a href="#examples-User-usersGet-0-curl">Curl</a>
+                                                </li>
+                                                <li class="">
+              <a href="#examples-User-usersGet-0-java">Java</a>
+            </li>
+            <li class="">
+              <a href="#examples-User-usersGet-0-android">Android</a>
+            </li>
+            <!--<li class="">
+              <a href="#examples-User-usersGet-0-groovy">Groovy</a>
+            </li>-->
+                                                <li class="">
+                                                    <a href="#examples-User-usersGet-0-objc">Obj-C</a>
+                                                </li>
+                                                <li class="">
+                                                    <a href="#examples-User-usersGet-0-javascript">JavaScript</a>
+                                                </li>
+                                                <!--<li class="">
+              <a href="#examples-User-usersGet-0-angular">Angular</a>
+            </li>-->
+                                                <li class="">
+                                                    <a href="#examples-User-usersGet-0-csharp">C#</a>
+                                                </li>
+                                                <li class="">
+              <a href="#examples-User-usersGet-0-php">PHP</a>
+            </li>
+                                            </ul>
+
+                                            <div class="tab-content">
+                                                <div class="tab-pane active" id="examples-User-usersGet-0-curl">
+                                                    <pre class="prettyprint"><code class="language-bsh">
+curl -X <span style="text-transform: uppercase;">get</span> -H "apiKey: [[apiKey]]" -H "apiSecret: [[apiSecret]]" "http://115.29.184.56:8080/che/api/v1.0/users?page=&limit="
+
+
+</code></pre>
+                                                </div>
+
+                                                <div class="tab-pane" id="examples-User-usersGet-0-java">
+                                                  <pre class="prettyprint"><code class="language-java">
+import io.swagger.client.*;
+import io.swagger.client.auth.*;
+import io.swagger.client.model.*;
+import .UserApi;
+
+import java.io.File;
+import java.util.*;
+
+public class UserApiExample {
+
+    public static void main(String[] args) {
+        
+        UserApi apiInstance = new UserApi();
+        Integer page = 56; // Integer | 页码（从1开始）页码
+        Integer limit = 56; // Integer | 每页数目
+        try {
+            array[User] result = apiInstance.usersGet(page, limit);
+            System.out.println(result);
+        } catch (ApiException e) {
+            System.err.println("Exception when calling UserApi#usersGet");
+            e.printStackTrace();
+        }
+    }
+}
+
+                                                  </code></pre>
+          </div>
+
+
+                                                <div class="tab-pane" id="examples-User-usersGet-0-android">
+                                                  <pre class="prettyprint"><code class="language-java">
+import .UserApi;
+
+public class UserApiExample {
+
+    public static void main(String[] args) {
+        UserApi apiInstance = new UserApi();
+        Integer page = 56; // Integer | 页码（从1开始）页码
+        Integer limit = 56; // Integer | 每页数目
+        try {
+            array[User] result = apiInstance.usersGet(page, limit);
+            System.out.println(result);
+        } catch (ApiException e) {
+            System.err.println("Exception when calling UserApi#usersGet");
+            e.printStackTrace();
+        }
+    }
+}
+
+                                                  </code></pre>
+          </div>
+
+          <!--
+          <div class="tab-pane" id="examples-User-usersGet-0-groovy">
+            <pre class="prettyprint language-json prettyprinted" data-type="json"><code>Coming Soon!</code></pre>
+          </div> -->
+
+
+                                                <div class="tab-pane" id="examples-User-usersGet-0-objc">
+                                                    <pre class="prettyprint"><code class="language-cpp">
+
+Integer *page = 56; // 页码（从1开始）页码
+Integer *limit = 56; // 每页数目
+
+UserApi *apiInstance = [[UserApi alloc] init];
+
+// 获取用户列表
+[apiInstance usersGetWith:page
+    limit:limit
+              completionHandler: ^(array[User] output, NSError* error) {
+                            if (output) {
+                                NSLog(@"%@", output);
+                            }
+                            if (error) {
+                                NSLog(@"Error: %@", error);
+                            }
+                        }];
+
+                                                    </code></pre>
+                                                </div>
+                                                <div class="tab-pane" id="examples-User-usersGet-0-javascript">
+                                                    <pre class="prettyprint"><code class="language-js">
+var  = require('');
+
+var api = new .UserApi()
+
+var page = 56; // {Integer} 页码（从1开始）页码
+
+var limit = 56; // {Integer} 每页数目
+
+
+var callback = function(error, data, response) {
+  if (error) {
+    console.error(error);
+  } else {
+    console.log('API called successfully. Returned data: ' + data);
+  }
+};
+api.usersGet(page, limit, callback);
+
+                                                    </code></pre>
+                                                </div>
+
+                                                <!--<div class="tab-pane" id="examples-User-usersGet-0-angular">
+            <pre class="prettyprint language-json prettyprinted" data-type="json"><code>Coming Soon!</code></pre>
+          </div>-->
+
+                                                <div class="tab-pane" id="examples-User-usersGet-0-csharp">
+                                                    <pre class="prettyprint"><code class="language-cs">
+using System;
+using System.Diagnostics;
+using .Api;
+using .Client;
+using ;
+
+namespace Example
+{
+    public class usersGetExample
+    {
+        public void main()
+        {
+            
+            var apiInstance = new UserApi();
+            var page = 56;  // Integer | 页码（从1开始）页码
+            var limit = 56;  // Integer | 每页数目
+
+            try
+            {
+                // 获取用户列表
+                array[User] result = apiInstance.usersGet(page, limit);
+                Debug.WriteLine(result);
+            }
+            catch (Exception e)
+            {
+                Debug.Print("Exception when calling UserApi.usersGet: " + e.Message );
+            }
+        }
+    }
+}
+
+                                                    </code></pre>
+                                                </div>
+
+
+                                                <div class="tab-pane" id="examples-User-usersGet-0-php">
+                                                  <pre class="prettyprint"><code class="language-php">
+<?php
+require_once(__DIR__ . '/vendor/autoload.php');
+
+$api_instance = new io.swagger.client\Api\UserApi();
+$page = 56; // Integer | 页码（从1开始）页码
+$limit = 56; // Integer | 每页数目
+
+try {
+    $result = $api_instance->usersGet($page, $limit);
+    print_r($result);
+} catch (Exception $e) {
+    echo 'Exception when calling UserApi->usersGet: ', $e->getMessage(), PHP_EOL;
+}
+
+                                                  </code></pre>
+          </div>
+
+                                            </div>
+
+
+
+
+
+                                            <h2>Parameters</h2>
+
+
+
+
+
+
+
+                                                <div class="methodsubtabletitle">Query parameters</div>
+                                                <table id="methodsubtable">
+                                                    <tr>
+                                                        <th width="150px">Name</th>
+                                                        <th>Description</th>
+                                                    </tr>
+                                                    <!---->
+                                                        <tr><td style="width:150px;">page*</td>
+<td>
+
+
+<script>
+												$(document).ready(function() {
+													var schemaWrapper = {
+  "name" : "page",
+  "in" : "query",
+  "description" : "页码（从1开始）页码",
+  "required" : true,
+  "type" : "integer"
+};
+													var schema = schemaWrapper;
+
+
+
+
+													var view = new JSONSchemaView(schema,0);
+													var result = $('#d2e199_usersGet_page');
+													result.empty();
+													result.append(view.render());
+
+
+
+
+
+												});
+												</script>
+												<div id="d2e199_usersGet_page"></div>
+</td>
+</tr>
+
+                                                        <tr><td style="width:150px;">limit*</td>
+<td>
+
+
+<script>
+												$(document).ready(function() {
+													var schemaWrapper = {
+  "name" : "limit",
+  "in" : "query",
+  "description" : "每页数目",
+  "required" : true,
+  "type" : "integer"
+};
+													var schema = schemaWrapper;
+
+
+
+
+													var view = new JSONSchemaView(schema,0);
+													var result = $('#d2e199_usersGet_limit');
+													result.empty();
+													result.append(view.render());
+
+
+
+
+
+												});
+												</script>
+												<div id="d2e199_usersGet_limit"></div>
+</td>
+</tr>
+
+                                                </table>
+
+                                            <h2>Responses</h2>
+
+                                                <h3> Status: 200 - 用户列表 </h3>
+
+                                                <ul class="nav nav-tabs nav-tabs-examples" >
+
+                                                    <li class="active">
+                                                        <a href="#examples-User-usersGet-schema">Schema</a>
+                                                    </li>
+
+
+                                                </ul>
+
+
+
+
+
+
+
+                                                <div class="tab-content" style='margin-bottom: 10px;'>
+
+
+
+                                                    <div class="tab-pane active" id="examples-User-usersGet-schema">
+
+
+
+
+                                                        <div id='examples-User-usersGet-schema-200' style="padding: 30px; border-left: 1px solid #eee; border-right: 1px solid #eee; border-bottom: 1px solid #eee;">
+
+                                                            <script>
+                                                                $(document).ready(function() {
+                                                                    var schemaWrapper = {
+  "description" : "用户列表",
+  "schema" : {
+    "type" : "array",
+    "items" : {
+      "$ref" : "#/definitions/User"
+    }
+  }
+};
+                                                                    var schema = schemaWrapper.schema;
+                                                                    schemaWrapper.definitions = defs;
+                                                                    //console.log(JSON.stringify(schema))
+                                                                    JsonRefs.resolveRefs(schemaWrapper, {
+                                                                        "depth": 3,
+                                                                        "resolveRemoteRefs": false,
+                                                                        "resolveFileRefs": false
+                                                                    }, function(err, resolved, metadata) {
+
+                                                                        //console.log(JSON.stringify(resolved));
+
+
+
+                                                                        var view = new JSONSchemaView(resolved.schema, 3);
+                                                                        $('#examples-User-usersGet-schema-data').val(JSON.stringify(resolved.schema));
+                                                                        var result = $('#examples-User-usersGet-schema-200');
+                                                                        result.empty();
+                                                                        result.append(view.render());
+                                                                    });
+
+
+
+
+                                                                });
+                                                            </script>
+                                                        </div>
+                                                        <input id='examples-User-usersGet-schema-data' type='hidden' value=''></input>
+
+
+
+
+
+
+                                                    </div>
+
+
+
+
+                                                </div>
+
+
+
+
+                                                <h3> Status: 0 - Unexpected error </h3>
+
+                                                <ul class="nav nav-tabs nav-tabs-examples" >
+
+                                                    <li class="active">
+                                                        <a href="#examples-User-usersGet-schema">Schema</a>
+                                                    </li>
+
+
+                                                </ul>
+
+
+
+
+
+
+
+                                                <div class="tab-content" style='margin-bottom: 10px;'>
+
+
+
+                                                    <div class="tab-pane active" id="examples-User-usersGet-schema">
+
+
+
+
+                                                        <div id='examples-User-usersGet-schema-0' style="padding: 30px; border-left: 1px solid #eee; border-right: 1px solid #eee; border-bottom: 1px solid #eee;">
+
+                                                            <script>
+                                                                $(document).ready(function() {
+                                                                    var schemaWrapper = {
+  "description" : "Unexpected error",
+  "schema" : {
+    "$ref" : "#/definitions/Error"
+  }
+};
+                                                                    var schema = schemaWrapper.schema;
+                                                                    schemaWrapper.definitions = defs;
+                                                                    //console.log(JSON.stringify(schema))
+                                                                    JsonRefs.resolveRefs(schemaWrapper, {
+                                                                        "depth": 3,
+                                                                        "resolveRemoteRefs": false,
+                                                                        "resolveFileRefs": false
+                                                                    }, function(err, resolved, metadata) {
+
+                                                                        //console.log(JSON.stringify(resolved));
+
+
+
+                                                                        var view = new JSONSchemaView(resolved.schema, 3);
+                                                                        $('#examples-User-usersGet-schema-data').val(JSON.stringify(resolved.schema));
+                                                                        var result = $('#examples-User-usersGet-schema-0');
+                                                                        result.empty();
+                                                                        result.append(view.render());
+                                                                    });
+
+
+
+
+                                                                });
+                                                            </script>
+                                                        </div>
+                                                        <input id='examples-User-usersGet-schema-data' type='hidden' value=''></input>
+
+
+
+
+
+
+                                                    </div>
+
+
+
+
+                                                </div>
+
+
+
+
+
+
+
+
+
+                                        </article>
+
+                                    </div>
+
+                                    <hr>
+
 
 
 
@@ -6980,7 +7888,7 @@ try {
             </div>
             <div id="generator">
                 <div class="content">
-                    Generated 2016-09-18T08:57:06.162Z
+                    Generated 2016-09-19T06:53:50.073Z
                 </div>
             </div>
         </div>

@@ -92,6 +92,17 @@ class UsersAPI(Resource):
         db.session.commit()
         return {'name':user.name,'username': user.username,'user_id':user.id},
 
+
+    def get(self):
+        page = int(request.args.get('page',1))
+        limit = int(request.args.get('limit',20))
+        offset = (page-1)*limit
+        users = db.session.query(User).offset(offset).limit(limit).all()
+        tmp = []
+        for user in users:
+            tmp.append(user.json())
+        return tmp
+        pass
     # 删除用户的同时记得删除workspace
     def delete(self):
         pass
@@ -104,7 +115,7 @@ def get_user(id):
     user = User.query.get(id)
     if not user:
         abort(400)
-    return jsonify({'username': user.username, 'name':user.name, 'user_id':user.user_id})
+    return jsonify({'username': user.username, 'name':user.name, 'user_id':user.id})
 
 
 @app.route('/che/api/v1.0/token')

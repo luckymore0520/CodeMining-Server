@@ -227,6 +227,25 @@ paths:
             $ref: "#/definitions/Error"
       x-swagger-router-controller: "Project"
   /projects:
+    get:
+      tags:
+      - "Project"
+      summary: "获取所有项目"
+      description: "获取所有项目"
+      operationId: "projectsGET"
+      parameters: []
+      responses:
+        200:
+          description: "项目列表"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/Project"
+        default:
+          description: "Unexpected error"
+          schema:
+            $ref: "#/definitions/Error"
+      x-swagger-router-controller: "Project"
     post:
       tags:
       - "Project"
@@ -255,6 +274,35 @@ paths:
             $ref: "#/definitions/Error"
       x-swagger-router-controller: "Project"
   /users:
+    get:
+      tags:
+      - "User"
+      summary: "获取用户列表"
+      description: "按照 page 和 limit 获取用户列表"
+      operationId: "usersGET"
+      parameters:
+      - name: "page"
+        in: "query"
+        description: "页码（从1开始）页码"
+        required: true
+        type: "integer"
+      - name: "limit"
+        in: "query"
+        description: "每页数目"
+        required: true
+        type: "integer"
+      responses:
+        200:
+          description: "用户列表"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/User"
+        default:
+          description: "Unexpected error"
+          schema:
+            $ref: "#/definitions/Error"
+      x-swagger-router-controller: "User"
     post:
       tags:
       - "User"
