@@ -21,7 +21,7 @@ class Project(db.Model):
     url = db.Column(db.String(128))
 
     def json(self):
-        return jsonify({"name":self.name,"description":self.description,"url":self.url,"id":self.id})
+        return {"name":self.name,"description":self.description,"url":self.url,"id":self.id}
 
 class ProjectAPI(Resource):
     # 根据项目id获取项目详情
@@ -59,6 +59,15 @@ class ProjectsAPI(Resource):
         db.session.add(project)
         db.session.commit()
         return project.json()
+
+    # 获取项目
+    def get(self):
+        result = db.session.query(Project).all()
+        tmp = []
+        for project in result:
+            tmp.append(project.json())
+        return tmp
+        pass
 api.add_resource(ProjectsAPI, '/che/api/v1.0/projects', endpoint = 'Projects')
 
 @app.errorhandler(400)
