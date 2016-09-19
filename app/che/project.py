@@ -58,7 +58,7 @@ class ProjectsAPI(Resource):
         project.url = url
         db.session.add(project)
         db.session.commit()
-        return project.json()
+        return project.json(),200
 
     # 获取项目
     def get(self):

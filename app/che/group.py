@@ -56,7 +56,7 @@ class GroupAPI(Resource):
         group.description = description
         db.session.add(group)
         db.session.commit()
-        return group.json()
+        return group.json(),200
         pass
 
     # # 修改群组
@@ -75,7 +75,7 @@ class GroupRelationAPI(Resource):
     def get(self):
         user_id = request.args.get('user_id',0)
         group_id = request.args.get('group_id',0)
-        
+
         if user_id != 0:
             relations = GroupRelation.query.filter_by(user_id=user_id)
             groups = []
@@ -106,7 +106,7 @@ class GroupRelationAPI(Resource):
         group_relation.user_id = user_id
         db.session.add(group_relation)
         result = db.session.commit()
-        return {"result":1, "message":"success！"}
+        return {"result":1, "message":"success！"},200
         pass
 
     def delete(self):

@@ -90,7 +90,7 @@ class UsersAPI(Resource):
         user.gitlab_id = glUser.id
         db.session.add(user)
         db.session.commit()
-        return {'name':user.name,'username': user.username,'user_id':user.id},
+        return {'name':user.name,'username': user.username,'user_id':user.id},200
 
 
     def get(self):
