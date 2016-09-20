@@ -44,6 +44,17 @@ def configExam(exam):
         user = User.query.filter_by(id = relation.user_id).first()
         gl.user_projects.create({'name':project.name,'user_id':user.gitlab_id})
 
+class ExamUserAPI(Resource):
+    def get(self,user_id):
+        relations = GroupRelation.query.filter_by(user_id = user_id).all()
+        result = []
+        for relation in relations:
+            exams = Exam.query.filter_by(group_id = relation.group_id)
+            for exam in exams:
+                result.append(exam.json())
+        return result
+        pass
+api.add_resource(ExamUserAPI, '/che/api/v1.0/examsOfUser/<string:user_id>', endpoint = 'exams_user')
 
 class ExamAPI(Resource):
     def get(self,exam_id):

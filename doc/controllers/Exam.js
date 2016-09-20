@@ -18,6 +18,10 @@ module.exports.examsGET = function examsGET (req, res, next) {
   Exam.examsGET(req.swagger.params, res, next);
 };
 
+module.exports.examsOfUserUser_idGET = function examsOfUserUser_idGET (req, res, next) {
+  Exam.examsOfUserUser_idGET(req.swagger.params, res, next);
+};
+
 module.exports.examsPOST = function examsPOST (req, res, next) {
   Exam.examsPOST(req.swagger.params, res, next);
 };

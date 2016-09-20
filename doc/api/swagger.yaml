@@ -98,6 +98,26 @@ paths:
           schema:
             $ref: "#/definitions/Error"
       x-swagger-router-controller: "Exam"
+  /examsOfUser/user_id:
+    get:
+      tags:
+      - "Exam"
+      summary: "获取学生考试列表"
+      description: "user_id 为学生id， 传入user_id直接返回学生所参与的所有考试"
+      operationId: "examsOfUserUser_idGET"
+      parameters: []
+      responses:
+        200:
+          description: "考试列表"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/Exam"
+        default:
+          description: "Unexpected error"
+          schema:
+            $ref: "#/definitions/Error"
+      x-swagger-router-controller: "Exam"
   /groupRelation:
     get:
       tags:
