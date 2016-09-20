@@ -42,6 +42,7 @@ def configExam(exam):
     relations = GroupRelation.query.filter_by(group_id = exam.group_id).all()
     for relation in relations:
         user = User.query.filter_by(id = relation.user_id).first()
+	print("create: " + project.name + "gitlab_id" + user.gitlab_id)
         gl.user_projects.create({'name':project.name,'user_id':user.gitlab_id})
 
 class ExamUserAPI(Resource):
