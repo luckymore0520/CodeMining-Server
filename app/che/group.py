@@ -101,12 +101,16 @@ class GroupRelationAPI(Resource):
             abort(400)
         user_id = request.json['user_id']
         group_id = request.json['group_id']
-        group_relation = GroupRelation()
-        group_relation.group_id = group_id
-        group_relation.user_id = user_id
-        db.session.add(group_relation)
-        result = db.session.commit()
-        return {"result":1, "message":"success！"},200
+        relations = GroupRelation.query.filter_by(user_id=user_id,group_id = group_id)
+        if (relations.first()):
+            abort(409)
+        else:
+            group_relation = GroupRelation()
+            group_relation.group_id = group_id
+            group_relation.user_id = user_id
+            db.session.add(group_relation)
+            result = db.session.commit()
+            return {"result":1, "message":"success！"},200
         pass
 
     def delete(self):

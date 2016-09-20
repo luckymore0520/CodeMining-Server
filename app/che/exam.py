@@ -9,6 +9,7 @@ from group import GroupRelation
 from user import User
 from tools import SimpleResult
 from datetime import datetime
+import traceback
 import json
 
 # Model Exam 群组 对应表:Exam
@@ -40,10 +41,15 @@ def configExam(exam):
     if not project:
         return
     relations = GroupRelation.query.filter_by(group_id = exam.group_id).all()
+    failedUser = []
     for relation in relations:
         user = User.query.filter_by(id = relation.user_id).first()
-	print("create: " + project.name + "gitlab_id" + user.gitlab_id)
-        gl.user_projects.create({'name':project.name,'user_id':user.gitlab_id})
+        try:
+            gl.user_projects.create({'name':project.name,'user_id':user.gitlab_id})
+        except Exception,ex:
+            failedUser.append(user.username)
+    return failedUser
+
 
 class ExamUserAPI(Resource):
     def get(self,user_id):
@@ -86,8 +92,8 @@ class ExamsAPI(Resource):
 
         if name is None or project_id is None or group_id is None:
             abort(400)    # missing arguments
-        if Exam.query.filter_by(name=name).first() is not None:
-            abort(400)
+        if Exam.query.filter_by(project_id = project_id, group_id = group_id).first() is not None:
+            abort(409)
         exam = Exam()
         exam.name = name
         exam.description = description
@@ -96,10 +102,12 @@ class ExamsAPI(Resource):
         exam.start_date = datetime.strptime(start_date,'%Y-%m-%d %H:%M:%S')
         exam.end_date = datetime.strptime(end_date,'%Y-%m-%d %H:%M:%S')
         exam.config = "会是一段json配置，需要显示给学生"
-        configExam(exam)
+        failedUser = configExam(exam)
         db.session.add(exam)
         db.session.commit()
-        return exam.json()
+        result = exam.json()
+        result["failedUser"] = failedUser
+        return result
 
     #获取考试，若有参数group_id，则或许特定群组的考试，否则获取全部
     def get(self):
