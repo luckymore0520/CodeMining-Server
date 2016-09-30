@@ -23,31 +23,33 @@ class Exam(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(32))
     description = db.Column(db.Text)
-    project_id = db.Column(db.Integer, ForeignKey('Project.id'))
+    project_ids = db.Column(db.String(64))
     group_id = db.Column(db.Integer, ForeignKey('Group.id'))
     start_date = db.Column(db.DateTime)
     end_date = db.Column(db.DateTime)
-    config = db.Column(db.Text)
 
 
     def json(self):
-        return {"name":self.name,"description":self.description,"project_id":self.project_id,"group_id":self.group_id,"id":self.id,"start_date":self.start_date.strftime('%Y-%m-%d %H:%M:%S'),"end_date":self.end_date.strftime('%Y-%m-%d %H:%M:%S'), "config":self.config}
+        return {"name":self.name,"description":self.description,"project_ids":self.project_ids,"group_id":self.group_id,"id":self.id,"start_date":self.start_date.strftime('%Y-%m-%d %H:%M:%S'),"end_date":self.end_date.strftime('%Y-%m-%d %H:%M:%S')}
 
 
 
 # TODO Gitlab 需要在用户所对应的Gitlab账户中 Fork 该项目
 def configExam(exam):
-    project = Project.query.get(exam.project_id)
-    if not project:
-        return
-    relations = GroupRelation.query.filter_by(group_id = exam.group_id).all()
+    projects = exam.project_ids.split(",")
     failedUser = []
-    for relation in relations:
-        user = User.query.filter_by(id = relation.user_id).first()
-        try:
-            gl.user_projects.create({'name':project.name,'user_id':user.gitlab_id})
-        except Exception,ex:
-            failedUser.append(user.username)
+    relations = GroupRelation.query.filter_by(group_id = exam.group_id).all()
+    for project_id in projects:
+        print(project_id)
+        project = Project.query.get(project_id)
+        if not project:
+            return
+        for relation in relations:
+            user = User.query.filter_by(id = relation.user_id).first()
+            try:
+                gl.user_projects.create({'name':project.name,'user_id':user.gitlab_id})
+            except Exception,ex:
+                failedUser.append(project_id + ":" + user.username)
     return failedUser
 
 
@@ -85,19 +87,19 @@ class ExamsAPI(Resource):
     def post(self):
         name = request.json.get('name')
         description = request.json.get('description')
-        project_id = request.json.get('project_id')
+        project_ids = request.json.get('project_ids')
         group_id = request.json.get('group_id')
         start_date = request.json.get('start_date')
         end_date = request.json.get('end_date');
 
-        if name is None or project_id is None or group_id is None:
+        if name is None or project_ids is None or group_id is None:
             abort(400)    # missing arguments
-        if Exam.query.filter_by(project_id = project_id, group_id = group_id).first() is not None:
+        if Exam.query.filter_by(project_ids = project_ids, group_id = group_id).first() is not None:
             abort(409)
         exam = Exam()
         exam.name = name
         exam.description = description
-        exam.project_id = project_id
+        exam.project_ids = project_ids
         exam.group_id = group_id
         exam.start_date = datetime.strptime(start_date,'%Y-%m-%d %H:%M:%S')
         exam.end_date = datetime.strptime(end_date,'%Y-%m-%d %H:%M:%S')
