@@ -5,7 +5,7 @@ from app import app ,db , api,gl
 from sqlalchemy import ForeignKey
 from sqlalchemy.orm import relationship, backref
 from project import Project
-from group import GroupRelation
+from group import GroupRelation,Group
 from user import User
 from tools import SimpleResult
 from datetime import datetime
@@ -88,19 +88,32 @@ class ExamsAPI(Resource):
         name = request.json.get('name')
         description = request.json.get('description')
         project_ids = request.json.get('project_ids')
-        group_id = request.json.get('group_id')
+        usernames = request.json.get('usernames')
         start_date = request.json.get('start_date')
         end_date = request.json.get('end_date');
-
-        if name is None or project_ids is None or group_id is None:
+        if name is None or project_ids is None or usernames is None:
             abort(400)    # missing arguments
-        if Exam.query.filter_by(project_ids = project_ids, group_id = group_id).first() is not None:
-            abort(409)
+
+
+
+        group = Group()
+        group.name = name
+        db.session.add(group)
+        db.session.commit()
+
+        for username in usernames:
+            user = User.query.filter_by(username = username).first()
+            relation = GroupRelation()
+            relation.group_id = group.id
+            relation.user_id = user.id
+            db.session.add(relation)
+        db.session.commit()
+
         exam = Exam()
         exam.name = name
         exam.description = description
         exam.project_ids = project_ids
-        exam.group_id = group_id
+        exam.group_id = group.id
         exam.start_date = datetime.strptime(start_date,'%Y-%m-%d %H:%M:%S')
         exam.end_date = datetime.strptime(end_date,'%Y-%m-%d %H:%M:%S')
         exam.config = "会是一段json配置，需要显示给学生"

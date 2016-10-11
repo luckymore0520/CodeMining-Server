@@ -88,7 +88,7 @@ class GroupRelationAPI(Resource):
             relations = GroupRelation.query.filter_by(group_id=group_id)
             users = []
             for relation in relations:
-                user = User.query.get(relation.user_id)
+                user = User.query.get(user_id)
                 if user:
                     users.append(user.json())
             return {"users":users}

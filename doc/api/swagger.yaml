@@ -480,12 +480,12 @@ definitions:
       description:
         type: "string"
         description: "考试描述"
-      group_id:
+      usernames:
         type: "string"
-        description: "群组id"
-      porject_id:
+        description: "用户名，直接传用户名的数组 [\"user1\",\"user2\",\"user3\"]"
+      porject_ids:
         type: "string"
-        description: "项目id"
+        description: "项目id的序列，格式为 1,3,4 用逗号隔开"
       start_date:
         type: "string"
         format: "date"
