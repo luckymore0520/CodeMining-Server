@@ -1,0 +1,720 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "title": "Code-Mining API",
+        "description": "Coding-Mining 服务端API",
+        "version": "1.0.0"
+    },
+    "host": "115.29.184.56:8080",
+    "schemes": [
+        "http"
+    ],
+    "basePath": "/che/api/v1.0",
+    "produces": [
+        "application/json"
+    ],
+    "paths": {
+        "/users/id": {
+            "get": {
+                "summary": "获取特定用户信息",
+                "description": "根据id获取特定用户信息",
+                "tags": [
+                    "User"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "用户完整信息（不包含密码）",
+                        "schema": {
+                            "$ref": "#/definitions/User"
+                        }
+                    },
+                    "default": {
+                        "description": "Unexpected error",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    }
+                }
+            }
+        },
+        "/users": {
+            "get": {
+                "summary": "获取用户列表",
+                "description": "按照 page 和 limit 获取用户列表",
+                "parameters": [
+                    {
+                        "name": "page",
+                        "in": "query",
+                        "description": "页码（从1开始）页码",
+                        "type": "integer",
+                        "required": true
+                    },
+                    {
+                        "name": "limit",
+                        "in": "query",
+                        "description": "每页数目",
+                        "type": "integer",
+                        "required": true
+                    }
+                ],
+                "tags": [
+                    "User"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "用户列表",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/User"
+                            }
+                        }
+                    },
+                    "default": {
+                        "description": "Unexpected error",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "summary": "创建用户",
+                "description": "创建对应用户，创建用户的同时会创建其gitlab账户\n",
+                "parameters": [
+                    {
+                        "name": "json",
+                        "in": "body",
+                        "description": "用户信息",
+                        "required": true,
+                        "schema": {
+                            "properties": {
+                                "username": {
+                                    "type": "string",
+                                    "description": "用户名"
+                                },
+                                "password": {
+                                    "type": "string",
+                                    "description": "用户密码，这里存储的时候会进行加密"
+                                },
+                                "name": {
+                                    "type": "string",
+                                    "description": "用户昵称，这里不同于用户名，用于直接显示的用户名称"
+                                }
+                            }
+                        }
+                    }
+                ],
+                "tags": [
+                    "User"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "用户具体信息，包含workspaceId",
+                        "schema": {
+                            "$ref": "#/definitions/User"
+                        }
+                    },
+                    "400": {
+                        "description": "参数缺少",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "409": {
+                        "description": "重复名称",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "default": {
+                        "description": "Unexpected error",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    }
+                }
+            }
+        },
+        "/groups": {
+            "post": {
+                "summary": "创建群组",
+                "description": "创建对应群组\n",
+                "parameters": [
+                    {
+                        "name": "json",
+                        "in": "body",
+                        "description": "群组信息",
+                        "required": true,
+                        "schema": {
+                            "properties": {
+                                "name": {
+                                    "type": "string",
+                                    "description": "群组名称"
+                                },
+                                "description": {
+                                    "type": "string",
+                                    "description": "群组描述"
+                                }
+                            }
+                        }
+                    }
+                ],
+                "tags": [
+                    "Group"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "群组具体信息",
+                        "schema": {
+                            "$ref": "#/definitions/Group"
+                        }
+                    },
+                    "400": {
+                        "description": "参数缺少",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "409": {
+                        "description": "重复名称",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "default": {
+                        "description": "Unexpected error",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    }
+                }
+            },
+            "get": {
+                "summary": "获取群组",
+                "description": "获取全部群组",
+                "tags": [
+                    "Group"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "群组信息列表",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/Group"
+                            }
+                        }
+                    },
+                    "default": {
+                        "description": "Unexpected error",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    }
+                }
+            }
+        },
+        "/groupRelation": {
+            "post": {
+                "summary": "用户分组",
+                "description": "将某用户加入某一组中",
+                "parameters": [
+                    {
+                        "name": "json",
+                        "in": "body",
+                        "description": "群组成员关系信息",
+                        "required": true,
+                        "schema": {
+                            "properties": {
+                                "user_id": {
+                                    "type": "string",
+                                    "description": "用户id"
+                                },
+                                "group_id": {
+                                    "type": "string",
+                                    "description": "群组id"
+                                }
+                            }
+                        }
+                    }
+                ],
+                "tags": [
+                    "GroupRelation"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "返回结果",
+                        "schema": {
+                            "$ref": "#/definitions/SimpleResult"
+                        }
+                    },
+                    "400": {
+                        "description": "参数缺少",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "default": {
+                        "description": "Unexpected error",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    }
+                }
+            },
+            "get": {
+                "summary": "获取群组信息",
+                "description": "获取群组中的用户或者获取用户所在群组，传user_id返回群组列表，传group_id返回用户列表",
+                "parameters": [
+                    {
+                        "name": "user_id",
+                        "in": "query",
+                        "description": "用户id",
+                        "type": "string"
+                    },
+                    {
+                        "name": "group_id",
+                        "in": "query",
+                        "description": "群组id",
+                        "type": "string"
+                    }
+                ],
+                "tags": [
+                    "GroupRelation"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "群组信息列表、用户信息列表",
+                        "schema": {
+                            "$ref": "#/definitions/RelationShipResult"
+                        }
+                    },
+                    "400": {
+                        "description": "参数缺少",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "default": {
+                        "description": "Unexpected error",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    }
+                }
+            }
+        },
+        "/projects": {
+            "post": {
+                "summary": "项目",
+                "description": "创建某个项目",
+                "parameters": [
+                    {
+                        "name": "json",
+                        "in": "body",
+                        "description": "项目基本信息",
+                        "required": true,
+                        "schema": {
+                            "properties": {
+                                "name": {
+                                    "type": "string",
+                                    "description": "项目名称"
+                                },
+                                "description": {
+                                    "type": "string",
+                                    "description": "项目描述"
+                                },
+                                "url": {
+                                    "type": "string",
+                                    "description": "项目原git仓库地址"
+                                }
+                            }
+                        }
+                    }
+                ],
+                "tags": [
+                    "Project"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "创建成功",
+                        "schema": {
+                            "$ref": "#/definitions/Project"
+                        }
+                    },
+                    "400": {
+                        "description": "参数缺少",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "default": {
+                        "description": "Unexpected error",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    }
+                }
+            },
+            "get": {
+                "summary": "获取所有项目",
+                "description": "获取所有项目",
+                "tags": [
+                    "Project"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "项目列表",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/Project"
+                            }
+                        }
+                    },
+                    "default": {
+                        "description": "Unexpected error",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    }
+                }
+            }
+        },
+        "/project/id": {
+            "get": {
+                "summary": "获取特定项目",
+                "description": "根据项目id获取特定项目",
+                "tags": [
+                    "Project"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "项目详情",
+                        "schema": {
+                            "$ref": "#/definitions/Project"
+                        }
+                    },
+                    "default": {
+                        "description": "Unexpected error",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    }
+                }
+            }
+        },
+        "/exams": {
+            "post": {
+                "summary": "创建考试",
+                "description": "为特定群组创建一次考试，创建完成后该群组所有成员的gitlab会fork一份项目，同时workspace中会出现该项目",
+                "parameters": [
+                    {
+                        "name": "json",
+                        "in": "body",
+                        "description": "考试名称",
+                        "required": true,
+                        "schema": {
+                            "properties": {
+                                "name": {
+                                    "type": "string",
+                                    "description": "考试名称"
+                                },
+                                "description": {
+                                    "type": "string",
+                                    "description": "考试描述"
+                                },
+                                "group_id": {
+                                    "type": "string",
+                                    "description": "群组id"
+                                },
+                                "porject_ids": {
+                                    "type": "string",
+                                    "description": "项目id"
+                                },
+                                "start_date": {
+                                    "type": "string",
+                                    "format": "date",
+                                    "description": "开始时间 格式为 2016-09-11 20:00:00 注意月和日必须是2位"
+                                },
+                                "end_date": {
+                                    "type": "string",
+                                    "format": "date",
+                                    "description": "结束时间"
+                                }
+                            }
+                        }
+                    }
+                ],
+                "tags": [
+                    "Exam"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "返回结果",
+                        "schema": {
+                            "$ref": "#/definitions/Exam"
+                        }
+                    },
+                    "400": {
+                        "description": "参数缺少",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "default": {
+                        "description": "Unexpected error",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    }
+                }
+            },
+            "get": {
+                "summary": "获取考试列表",
+                "description": "参数可选，若为空返回全部考试，或不为空，返回特定群组的考试",
+                "tags": [
+                    "Exam"
+                ],
+                "parameters": [
+                    {
+                        "name": "group_id",
+                        "in": "query",
+                        "type": "string",
+                        "description": "群组id"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "考试信息列表",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/Exam"
+                            }
+                        }
+                    },
+                    "default": {
+                        "description": "Unexpected error",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    }
+                }
+            }
+        },
+        "/examsOfUser/user_id": {
+            "get": {
+                "summary": "获取学生考试列表",
+                "description": "user_id 为学生id， 传入user_id直接返回学生所参与的所有考试",
+                "tags": [
+                    "Exam"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "考试列表",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/Exam"
+                            }
+                        }
+                    },
+                    "default": {
+                        "description": "Unexpected error",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    }
+                }
+            }
+        },
+        "/exams/exam_id": {
+            "get": {
+                "summary": "获取指定考试信息",
+                "description": "exam_id为考试的id，如果不存在返回空",
+                "tags": [
+                    "Exam"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "考试详细信息",
+                        "schema": {
+                            "$ref": "#/definitions/Exam"
+                        }
+                    },
+                    "default": {
+                        "description": "Unexpected error",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "summary": "删除指定考试",
+                "description": "根据考试id删除指定考试",
+                "tags": [
+                    "Exam"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "删除结果",
+                        "schema": {
+                            "$ref": "#/definitions/SimpleResult"
+                        }
+                    },
+                    "default": {
+                        "description": "Unexpected error",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "RelationShipResult": {
+            "type": "object",
+            "properties": {
+                "users": {
+                    "type": "array",
+                    "description": "用户列表",
+                    "items": {
+                        "$ref": "#/definitions/User"
+                    }
+                },
+                "groups": {
+                    "type": "array",
+                    "description": "群组列表",
+                    "items": {
+                        "$ref": "#/definitions/Group"
+                    }
+                }
+            }
+        },
+        "User": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "string",
+                    "description": "用户id"
+                },
+                "username": {
+                    "type": "string",
+                    "description": "用户名"
+                },
+                "name": {
+                    "type": "string",
+                    "description": "用户姓名"
+                }
+            }
+        },
+        "Group": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "string",
+                    "description": "群组id"
+                },
+                "name": {
+                    "type": "string",
+                    "description": "群组名称"
+                },
+                "description": {
+                    "type": "string",
+                    "description": "群组描述"
+                }
+            }
+        },
+        "Project": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "string",
+                    "description": "项目id"
+                },
+                "name": {
+                    "type": "string",
+                    "description": "项目名称"
+                },
+                "description": {
+                    "type": "string",
+                    "description": "项目描述"
+                },
+                "url": {
+                    "type": "string",
+                    "description": "项目对应的git仓库url"
+                }
+            }
+        },
+        "Exam": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "string",
+                    "description": "考试id"
+                },
+                "name": {
+                    "type": "string",
+                    "description": "考试名称"
+                },
+                "description": {
+                    "type": "string",
+                    "description": "考试描述"
+                },
+                "group_id": {
+                    "type": "string",
+                    "description": "考试所对应的群组id"
+                },
+                "project_id": {
+                    "type": "string",
+                    "description": "考试所需要的项目id"
+                },
+                "start_time": {
+                    "type": "string",
+                    "format": "date",
+                    "description": "开始时间"
+                },
+                "end_time": {
+                    "type": "string",
+                    "format": "date",
+                    "description": "结束时间"
+                },
+                "cofig": {
+                    "type": "string",
+                    "description": "考试配置"
+                }
+            }
+        },
+        "SimpleResult": {
+            "type": "object",
+            "properties": {
+                "result": {
+                    "type": "integer",
+                    "format": "int32"
+                },
+                "message": {
+                    "type": "string"
+                }
+            }
+        },
+        "Error": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "type": "integer",
+                    "format": "int32"
+                },
+                "message": {
+                    "type": "string"
+                },
+                "fields": {
+                    "type": "string"
+                }
+            }
+        }
+    }
+}
