@@ -482,10 +482,11 @@ definitions:
         description: "考试描述"
       usernames:
         type: "string"
-        description: "用户名，直接传用户名的数组 [\"user1\",\"user2\",\"user3\"]"
+        description: "这里传数组 [\"user1\",\"user2\",\"user3\"]  用户名的数组，不是用户id，我们现在不以用\
+          户id做交流"
       porject_ids:
         type: "string"
-        description: "项目id的序列，格式为 1,3,4 用逗号隔开"
+        description: "项目id   1,2,3,4,5  逗号分隔"
       start_date:
         type: "string"
         format: "date"

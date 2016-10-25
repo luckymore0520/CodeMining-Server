@@ -425,13 +425,13 @@
                                     "type": "string",
                                     "description": "考试描述"
                                 },
-                                "group_id": {
+                                "usernames": {
                                     "type": "string",
-                                    "description": "群组id"
+                                    "description": "这里传数组 [\"user1\",\"user2\",\"user3\"]  用户名的数组，不是用户id，我们现在不以用户id做交流"
                                 },
                                 "porject_ids": {
                                     "type": "string",
-                                    "description": "项目id"
+                                    "description": "项目id   1,2,3,4,5  逗号分隔"
                                 },
                                 "start_date": {
                                     "type": "string",
