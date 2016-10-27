@@ -36,7 +36,7 @@ class Exam(db.Model):
 
 # TODO Gitlab 需要在用户所对应的Gitlab账户中 Fork 该项目
 def configExam(exam):
-    projects = exam.project_ids
+    projects = exam.project_ids.split(",")
     failedUser = []
     relations = GroupRelation.query.filter_by(group_id = exam.group_id).all()
     for project_id in projects:
@@ -112,7 +112,7 @@ class ExamsAPI(Resource):
         exam = Exam()
         exam.name = name
         exam.description = description
-        exam.project_ids = project_ids
+        exam.project_ids = ','.join(project_ids)
         exam.group_id = group.id
         exam.start_date = datetime.strptime(start_date,'%Y-%m-%d %H:%M:%S')
         exam.end_date = datetime.strptime(end_date,'%Y-%m-%d %H:%M:%S')
