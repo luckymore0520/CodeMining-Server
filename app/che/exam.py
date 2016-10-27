@@ -36,7 +36,7 @@ class Exam(db.Model):
 
 # TODO Gitlab 需要在用户所对应的Gitlab账户中 Fork 该项目
 def configExam(exam):
-    projects = exam.project_ids.split(",")
+    projects = exam.project_ids
     failedUser = []
     relations = GroupRelation.query.filter_by(group_id = exam.group_id).all()
     for project_id in projects:
