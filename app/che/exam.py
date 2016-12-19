@@ -25,6 +25,25 @@ def createRepos():
     return jsonify({"code":1,"failedRepo":failedUser}),200
 
 
+@app.route('/api/user/createUser', methods=['POST'])
+def createGitlabUser():
+    username = request.json.get("username")
+    password = request.json.get("password")
+    if not username or not password:
+        abort(400)
+    try:
+        glUser = gl.users.create({'email': username+"@mail.smal.nju.edu.cn",
+                        'password': password,
+                        'username': username,
+                        'name': username})
+        return jsonify({"code":1,"gitlabId":glUser.id}),200
+    except Exception,ex:
+        return jsonify({"code":0,"gitlabId":""}),200
+
+
+
+
+
 #上传一个项目
 @app.route('/api/exam/uploadProject', methods=['POST'])
 def uploadFile():

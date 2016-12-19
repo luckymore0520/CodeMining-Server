@@ -1,0 +1,217 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "title": "Code-Mining API",
+        "description": "Coding-Mining 服务端API",
+        "version": "1.0.0"
+    },
+    "host": "115.29.184.56:8080",
+    "schemes": [
+        "http"
+    ],
+    "basePath": "/che/api/v1.0",
+    "produces": [
+        "application/json"
+    ],
+    "paths": {
+        "/user/createUser": {
+            "post": {
+                "summary": "创建gitlab账户",
+                "description": "为特定学生创建gitlab账号",
+                "parameters": [
+                    {
+                        "name": "json",
+                        "in": "body",
+                        "description": "用户信息",
+                        "required": true,
+                        "schema": {
+                            "properties": {
+                                "username": {
+                                    "type": "string",
+                                    "description": "用户名"
+                                },
+                                "password": {
+                                    "type": "string",
+                                    "description": "密码"
+                                }
+                            }
+                        }
+                    }
+                ],
+                "tags": [
+                    "User"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "返回结果",
+                        "schema": {
+                            "$ref": "#/definitions/CreateUserResult"
+                        }
+                    },
+                    "400": {
+                        "description": "参数缺少",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "default": {
+                        "description": "Unexpected error",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    }
+                }
+            }
+        },
+        "/exams/createRepos": {
+            "post": {
+                "summary": "创建仓库",
+                "description": "为特定学生创建考试",
+                "parameters": [
+                    {
+                        "name": "json",
+                        "in": "body",
+                        "description": "仓库相关参数",
+                        "required": true,
+                        "schema": {
+                            "properties": {
+                                "userList": {
+                                    "type": "string",
+                                    "description": "用户列表，是一个数组类型，类似 [\"2\",\"4\",\"5\"]"
+                                },
+                                "projectList": {
+                                    "type": "string",
+                                    "description": "项目列表, 是一个数组类型，类似[\"aaa\",\"bbb\"]"
+                                }
+                            }
+                        }
+                    }
+                ],
+                "tags": [
+                    "Exam"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "返回结果",
+                        "schema": {
+                            "$ref": "#/definitions/CreateResult"
+                        }
+                    },
+                    "400": {
+                        "description": "参数缺少",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "default": {
+                        "description": "Unexpected error",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    }
+                }
+            }
+        },
+        "/exams/uploadProject": {
+            "post": {
+                "summary": "上传项目",
+                "description": "上传项目zip包，直接使用表单提交就行了，存在'file'里",
+                "parameters": [
+                    {
+                        "name": "json",
+                        "in": "body",
+                        "description": "项目相关参数",
+                        "required": true,
+                        "schema": {
+                            "properties": {
+                                "projectName": {
+                                    "type": "string",
+                                    "description": "项目名称"
+                                }
+                            }
+                        }
+                    }
+                ],
+                "tags": [
+                    "Exam"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "返回结果",
+                        "schema": {
+                            "$ref": "#/definitions/SimpleResult"
+                        }
+                    },
+                    "400": {
+                        "description": "参数缺少",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "default": {
+                        "description": "Unexpected error",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "CreateUserResult": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "type": "integer",
+                    "format": "int32"
+                },
+                "gitlabId": {
+                    "type": "string",
+                    "description": "用户的gitlabId"
+                }
+            }
+        },
+        "CreateResult": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "type": "integer",
+                    "format": "int32"
+                },
+                "failedRepo": {
+                    "type": "string",
+                    "description": "返回的是一个数组（忽略上面的类型)，数组里面是 失败的用户以及项目的序列 \"项目名称：gitlabId\""
+                }
+            }
+        },
+        "SimpleResult": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "type": "integer",
+                    "format": "int32"
+                },
+                "gitlabUrl": {
+                    "type": "string",
+                    "description": "对应的gitlab地址"
+                }
+            }
+        },
+        "Error": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "type": "integer",
+                    "format": "int32"
+                },
+                "message": {
+                    "type": "string"
+                },
+                "fields": {
+                    "type": "string"
+                }
+            }
+        }
+    }
+}
