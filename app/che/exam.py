@@ -9,23 +9,26 @@ import os
 from werkzeug import secure_filename
 
 #给学生创建对应名称的仓库
-@app.route('/api/exam/createRepos', methods=['POST'])
+@app.route('/api/exams/createRepos', methods=['POST'])
 def createRepos():
-    user_list = request.json.get("userList")
-    project_list = request.json.get("projectList")
+    user_list = request.json.get("gitIds")
+    project_list = request.json.get("projects")
     if not user_list or not project_list:
         abort(400)
-    failedUser = []
-    for project_name in project_list:
-        for gitlab_id in user_list:
+    failedUser = {}
+    for gitlab_id in user_list:
+        for project_name in project_list:
             try:
                 gl.user_projects.create({'name':project_name,'user_id':gitlab_id})
             except Exception,ex:
-                failedUser.append(project_name + ":" + str(gitlab_id))
+
+                if not failedUser.has_key(gitlab_id):
+                    failedUser[gitlab_id] = []
+                failedUser[gitlab_id].append(project_name) 
     return jsonify({"code":1,"failedRepo":failedUser}),200
 
 
-@app.route('/api/user/createUser', methods=['POST'])
+@app.route('/api/users/createUser', methods=['POST'])
 def createGitlabUser():
     username = request.json.get("username")
     password = request.json.get("password")
@@ -36,9 +39,9 @@ def createGitlabUser():
                         'password': password,
                         'username': username,
                         'name': username})
-        return jsonify({"code":1,"gitlabId":glUser.id}),200
+        return jsonify({"code":1,"gitId":glUser.id}),200
     except Exception,ex:
-        return jsonify({"code":0,"gitlabId":""}),200
+        return jsonify({"code":0}),200
 
 
 
