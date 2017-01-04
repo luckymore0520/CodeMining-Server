@@ -6,6 +6,12 @@ from datetime import datetime
 import traceback
 import json
 import os
+import shutil
+import urllib 
+import urllib2 
+import requests
+import zipfile
+import commands
 from werkzeug import secure_filename
 
 #给学生创建对应名称的仓库
@@ -44,21 +50,29 @@ def createGitlabUser():
         return jsonify({"code":0}),200
 
 
-
-
-
 #上传一个项目
 @app.route('/api/exam/uploadProject', methods=['POST'])
 def uploadFile():
-    f = request.files['file']
-    if not f:
-        abort(400)
-    fname = secure_filename(f.filename) #获取一个安全的文件名，且仅仅支持ascii字符；
+    project_name = request.json.get("projectName")
+    url = request.json.get("fileUrl")  
+    urllib.urlretrieve(url, "tmp/file.zip")
+    file_zip = zipfile.ZipFile("tmp/file.zip","r")
+    for file in file_zip.namelist():
+        file_zip.extract(file, r'./tmp')
+    file_zip.close()
+    os.remove("tmp/file.zip") 
+    list = os.listdir("tmp")
+    dirName = list[1]
+    list = os.listdir("tmp/"+dirName)
     try:
-        f.save(os.path.join("upload", fname))
+        gl.projects.create({'name': project_name})
     except Exception,ex:
-        return jsonify({"code":0,"message":"文件保存出现问题"}),200
-    return jsonify({"code":1,"gitlabUrl":""}),200
+        print("项目已存在")
+    (status, output) = commands.getstatusoutput('cd git && git clone http://115.29.184.56:10080/root/'+project_name+".git")
+    for file in list:
+        shutil.move("tmp/"+dirName+"/"+file,"git/"+project_name+"/"+file) 
+    (status, output) = commands.getstatusoutput('cd git/'+project_name + '&& git add * -f && git commit -m "init" && git push -u origin master')
+    return jsonify({"code":1}),200
 
 @app.errorhandler(400)
 def bad_request(error):
