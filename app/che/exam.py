@@ -71,8 +71,10 @@ def uploadFile():
     (status, output) = commands.getstatusoutput('cd git && git clone http://115.29.184.56:10080/root/'+project_name+".git")
     for file in list:
         shutil.move("tmp/"+dirName+"/"+file,"git/"+project_name+"/"+file) 
+    shutil.copyfile("default/Login.sh","git/"+project_name+"/Login.sh")
+    shutil.copyfile("default/auto-commit.sh","git/"+project_name+"/auto-commit.sh")
     (status, output) = commands.getstatusoutput('cd git/'+project_name + '&& git add * -f && git commit -m "init" && git push -u origin master')
-    return jsonify({"code":1,"gitUrl":'http://115.29.184.56:10080/root/'+project_name+'.git'}),200
+    return jsonify({"code":1,"gitUrl":'http://115.29.184.56:10080/root/'+project_name+".git"}),200
 
 @app.errorhandler(400)
 def bad_request(error):
