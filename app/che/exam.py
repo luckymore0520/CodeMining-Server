@@ -34,6 +34,39 @@ def createRepos():
     return jsonify({"code":1,"failedRepo":failedUser}),200
 
 
+@app.route('/api/users/massiveCreateWithArray', methods=['POST'])
+def massiveCreateWithArray():
+    users = request.json.get("users")
+    for user in users:
+        username = str(user)
+        password = username
+        try:
+            glUser = gl.users.create({'email': username+"@mail.smal.nju.edu.cn",
+                            'password': password,
+                            'username': username,
+                            'name': username})
+                
+        except Exception,ex:
+            print("创建失败"+username)
+    return jsonify({"code":1}),200
+
+@app.route('/api/users/massiveCreate', methods=['POST'])
+def massiveCreateGitlabUser():
+    start = request.json.get("start")
+    end = request.json.get("end")
+    for i in range(int(start),int(end)):
+        username = str(i)
+        password = username
+        try:
+            glUser = gl.users.create({'email': username+"@mail.smal.nju.edu.cn",
+                            'password': password,
+                            'username': username,
+                            'name': username})
+                
+        except Exception,ex:
+            print("创建失败"+username)
+    return jsonify({"code":1}),200
+
 @app.route('/api/users/createUser', methods=['POST'])
 def createGitlabUser():
     username = request.json.get("username")
