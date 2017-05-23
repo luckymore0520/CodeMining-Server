@@ -14,6 +14,19 @@ import zipfile
 import commands
 from werkzeug import secure_filename
 
+
+@app.route('/api/user/info', methods=['GET'])
+def getUser():
+    username = request.args.get('username')
+    if not username:
+        abort(400)
+    users = gl.users.list(username=username)
+    if len(users) == 0:
+        return jsonify({"code":1,"message":"用户不存在"}),200
+    user = users[0]
+    return jsonify({"code":0,"id":user.id}),200
+
+
 #给学生创建对应名称的仓库
 @app.route('/api/exams/createRepos', methods=['POST'])
 def createRepos():
